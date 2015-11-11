@@ -4,7 +4,7 @@
   "description": "nodejs dependency injection container",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "url": "http://github.com/bemisguided/rue.git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/bemisguided/rue#readme",
   "devDependencies": {
+    "mocha": "^2.3.3",
     "should": "^7.1.1",
     "sinon": "^1.17.2",
     "sinon-promise": "^0.1.3"
