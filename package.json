@@ -1,0 +1,29 @@
+{
+  "name": "rue",
+  "version": "0.0.1",
+  "description": "nodejs dependency injection container",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "url": "http://github.com/bemisguided/rue.git",
+    "type": "git"
+  },
+  "author": "@bemisguided",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bemisguided/rue/issues"
+  },
+  "homepage": "https://github.com/bemisguided/rue#readme",
+  "devDependencies": {
+    "should": "^7.1.1",
+    "sinon": "^1.17.2",
+    "sinon-promise": "^0.1.3"
+  },
+  "dependencies": {
+    "eventemitter2": "^0.4.14",
+    "introspect": "0.0.3",
+    "q": "^1.4.1"
+  }
+}
