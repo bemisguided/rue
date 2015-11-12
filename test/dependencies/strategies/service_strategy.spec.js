@@ -1,5 +1,5 @@
 var registry = appRequire('./registry');
-var serviceDependencyStrategy = appRequire('./dependencies/strategies/service_strategy');
+var strategy = appRequire('./dependencies/strategies/service_strategy');
 
 describe('./dependencies/strategies/service_strategy.js', function() {
 
@@ -10,7 +10,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         foo: 'test'
       };
       var dependency = {};
-      serviceDependencyStrategy.register(dependency, service);
+      strategy.register(dependency, service);
       dependency.should.have.property('instance', service);
     });
 
@@ -28,7 +28,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      serviceDependencyStrategy.startup(config, dependency)
+      strategy.startup(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           done();
@@ -51,7 +51,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      serviceDependencyStrategy.startup(config, dependency)
+      strategy.startup(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           spy.calledOnce.should.be.true();
@@ -75,7 +75,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      serviceDependencyStrategy.startup(config, dependency)
+      strategy.startup(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           spy.calledWith(config).should.be.true();
@@ -102,7 +102,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      serviceDependencyStrategy.startup(config, dependency)
+      strategy.startup(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           spy.calledWith(config).should.be.true();
@@ -123,9 +123,9 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      serviceDependencyStrategy.startup(config, dependency)
+      strategy.startup(config, dependency)
         .catch(function(err) {
-          err.message.should.be.eql('Unable to bind to method startup for dependency test had an unexpected parameter foobar');
+          err.message.should.be.eql('Unable to bind to method startup() for dependency test had an unexpected parameter foobar');
           done();
         })
         .done();
@@ -143,7 +143,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      serviceDependencyStrategy.startup(config, dependency)
+      strategy.startup(config, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Service named test is already started');
           done();
@@ -164,7 +164,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      serviceDependencyStrategy.shutdown(config, dependency)
+      strategy.shutdown(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           done();
@@ -187,7 +187,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      serviceDependencyStrategy.shutdown(config, dependency)
+      strategy.shutdown(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           spy.calledOnce.should.be.true();
@@ -211,7 +211,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      serviceDependencyStrategy.shutdown(config, dependency)
+      strategy.shutdown(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           spy.calledWith(config).should.be.true();
@@ -238,7 +238,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      serviceDependencyStrategy.shutdown(config, dependency)
+      strategy.shutdown(config, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           spy.calledWith(config).should.be.true();
@@ -247,7 +247,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         .done();
     });
 
-    it('throws exception for a service with a shutdown method containing an unrecognized parameter', function(done) {
+    it('throws exception for a service with a shutdown() method containing an unrecognized parameter', function(done) {
       var config = {
         foo: 'bar'
       };
@@ -259,9 +259,9 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      serviceDependencyStrategy.shutdown(config, dependency)
+      strategy.shutdown(config, dependency)
         .catch(function(err) {
-          err.message.should.be.eql('Unable to bind to method shutdown for dependency test had an unexpected parameter foobar');
+          err.message.should.be.eql('Unable to bind to method shutdown() for dependency test had an unexpected parameter foobar');
           done();
         })
         .done();
@@ -279,7 +279,7 @@ describe('./dependencies/strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      serviceDependencyStrategy.shutdown(config, dependency)
+      strategy.shutdown(config, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Service named test is already shutdown');
           done();
