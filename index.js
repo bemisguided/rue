@@ -1,1 +1,1 @@
-module.exports = require('./lib/registry');
+module.exports = require('./lib/rue');
