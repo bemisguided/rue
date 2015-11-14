@@ -1,7 +1,7 @@
 var registry = appRequire('./registry');
-var strategy = appRequire('./dependencies/strategies/prototype_strategy');
+var strategy = appRequire('./strategies/prototype_strategy');
 
-describe('./dependencies/strategies/prototype_strategy.js', function() {
+describe('./strategies/prototype_strategy.js', function() {
 
   describe('register()', function() {
 

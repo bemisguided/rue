@@ -1,5 +1,5 @@
-var Registry = appRequire('./reg.js').Registry;
-var strategies = appRequire('./dependencies/strategies');
+var Registry = appRequire('./reg.js');
+var strategies = appRequire('./strategies');
 
 describe('./lib/reg.js', function() {
 
