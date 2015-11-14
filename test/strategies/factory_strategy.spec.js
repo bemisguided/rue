@@ -24,6 +24,9 @@ describe('./strategies/factory_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var factory = {
         construct: function() {
           return instance;
@@ -33,7 +36,7 @@ describe('./strategies/factory_strategy.js', function() {
         name: 'test',
         factory: factory
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .then(function(dependency) {
           dependency.should.have.property('instance', instance);
           done();
@@ -49,6 +52,9 @@ describe('./strategies/factory_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var factory = {
         construct: function() {
           spy(config);
@@ -59,7 +65,7 @@ describe('./strategies/factory_strategy.js', function() {
         name: 'test',
         factory: factory
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .then(function(dependency) {
           dependency.should.have.property('instance', instance);
           spy.calledWith(config).should.be.true();
@@ -76,6 +82,9 @@ describe('./strategies/factory_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var factory = {
         construct: function(config, callback) {
           process.nextTick(function() {
@@ -88,7 +97,7 @@ describe('./strategies/factory_strategy.js', function() {
         name: 'test',
         factory: factory
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .then(function(dependency) {
           dependency.should.have.property('instance', instance);
           spy.calledWith(config).should.be.true();
@@ -101,6 +110,9 @@ describe('./strategies/factory_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var factory = {
         construct: function(foobar) {}
       };
@@ -108,7 +120,7 @@ describe('./strategies/factory_strategy.js', function() {
         name: 'test',
         factory: factory
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Unable to bind to method construct() for dependency test had an unexpected parameter foobar');
           done();
@@ -120,12 +132,15 @@ describe('./strategies/factory_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var factory = {};
       var dependency = {
         name: 'test',
         factory: factory
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Factory named test requires a construct() method');
           done();
@@ -137,6 +152,9 @@ describe('./strategies/factory_strategy.js', function() {
           var config = {
             foo: 'bar'
           };
+          var scope = {
+            config: config
+          };
           var factory = {
             construct: function() {
             }
@@ -145,7 +163,7 @@ describe('./strategies/factory_strategy.js', function() {
             name: 'test',
             factory: factory
           };
-          strategy.startup(config, dependency)
+          strategy.startup(scope, dependency)
             .catch(function(err) {
               err.message.should.be.eql('Factory named test construct() method did not yield an instance');
               done();
@@ -162,6 +180,9 @@ describe('./strategies/factory_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var factory = {
         construct: function() {
           return {};
@@ -172,13 +193,14 @@ describe('./strategies/factory_strategy.js', function() {
         factory: factory,
         instance: {}
       };
-      strategy.shutdown(config, dependency)
+      strategy.shutdown(scope, dependency)
         .then(function(dependency) {
           dependency.should.not.have.property('instance');
           done();
         })
         .done();
     });
+    
   });
 
 });

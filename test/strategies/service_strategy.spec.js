@@ -22,13 +22,16 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {};
       var dependency = {
         name: 'test',
         instance: service,
         state: registry.STATES.STOPPED
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           done();
@@ -41,6 +44,9 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {
         startup: function() {
           spy();
@@ -51,7 +57,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           spy.calledOnce.should.be.true();
@@ -65,6 +71,9 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {
         startup: function(config) {
           spy(config);
@@ -75,7 +84,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           spy.calledWith(config).should.be.true();
@@ -88,6 +97,9 @@ describe('./strategies/service_strategy.js', function() {
       var spy = sinon.spy();
       var config = {
         foo: 'bar'
+      };
+      var scope = {
+        config: config
       };
       var service = {
         startup: function(config, callback) {
@@ -102,7 +114,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STARTED);
           spy.calledWith(config).should.be.true();
@@ -115,6 +127,9 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {
         startup: function(foobar) {}
       };
@@ -123,7 +138,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Unable to bind to method startup() for dependency test had an unexpected parameter foobar');
           done();
@@ -138,12 +153,15 @@ describe('./strategies/service_strategy.js', function() {
       var service = {
         startup: function() {}
       };
+      var scope = {
+        config: config
+      };
       var dependency = {
         name: 'test',
         instance: service,
         state: registry.STATES.STARTED
       };
-      strategy.startup(config, dependency)
+      strategy.startup(scope, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Service named test is already started');
           done();
@@ -158,13 +176,16 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {};
       var dependency = {
         name: 'test',
         instance: service,
         state: registry.STATES.STARTED
       };
-      strategy.shutdown(config, dependency)
+      strategy.shutdown(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           done();
@@ -182,12 +203,15 @@ describe('./strategies/service_strategy.js', function() {
           spy();
         }
       };
+      var scope = {
+        config: config
+      };
       var dependency = {
         name: 'test',
         instance: service,
         state: registry.STATES.STARTED
       };
-      strategy.shutdown(config, dependency)
+      strategy.shutdown(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           spy.calledOnce.should.be.true();
@@ -201,6 +225,9 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {
         shutdown: function(config) {
           spy(config);
@@ -211,7 +238,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      strategy.shutdown(config, dependency)
+      strategy.shutdown(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           spy.calledWith(config).should.be.true();
@@ -224,6 +251,9 @@ describe('./strategies/service_strategy.js', function() {
       var spy = sinon.spy();
       var config = {
         foo: 'bar'
+      };
+      var scope = {
+        config: config
       };
       var service = {
         shutdown: function(config, callback) {
@@ -238,7 +268,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      strategy.shutdown(config, dependency)
+      strategy.shutdown(scope, dependency)
         .then(function(dependency) {
           dependency.state.should.be.eql(registry.STATES.STOPPED);
           spy.calledWith(config).should.be.true();
@@ -251,6 +281,9 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {
         shutdown: function(foobar) {}
       };
@@ -259,7 +292,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STARTED
       };
-      strategy.shutdown(config, dependency)
+      strategy.shutdown(scope, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Unable to bind to method shutdown() for dependency test had an unexpected parameter foobar');
           done();
@@ -271,6 +304,9 @@ describe('./strategies/service_strategy.js', function() {
       var config = {
         foo: 'bar'
       };
+      var scope = {
+        config: config
+      };
       var service = {
         shutdown: function() {}
       };
@@ -279,7 +315,7 @@ describe('./strategies/service_strategy.js', function() {
         instance: service,
         state: registry.STATES.STOPPED
       };
-      strategy.shutdown(config, dependency)
+      strategy.shutdown(scope, dependency)
         .catch(function(err) {
           err.message.should.be.eql('Service named test is already shutdown');
           done();
