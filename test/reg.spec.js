@@ -322,6 +322,79 @@ describe('./lib/reg.js', function() {
 
   });
 
+  describe('restore()', function() {
+
+    it('restores a stub to the original dependency', function() {
+      var name = 'test';
+      var type = strategies.TYPES.SERVICE;
+      var service = {
+        startup: function() {}
+      };
+      var stub = {
+        stub: function() {}
+      };
+      registry.register(name, type, service);
+      registry.activate();
+      registry.get(name).should.have.property('instance', service);
+      registry.stub(name, stub);
+      registry.get(name).should.have.property('instance', stub);
+      registry.restore(name);
+      registry.get(name).should.have.property('instance', service);
+    });
+
+    it('throws an error when attempting to restore a dependency that is not stubbed', function() {
+      var name = 'test';
+      var type = strategies.TYPES.SERVICE;
+      var service = {
+        startup: function() {}
+      };
+      var stub = {
+        stub: function() {}
+      };
+      registry.register(name, type, service);
+      registry.activate();
+      (function() {
+        registry.restore(name);
+      }).should.throw('Stubbed dependency could not be restored for name "test"');
+    });
+
+  });
+
+  describe('stub()', function() {
+
+    it('stubs and returns an active dependency with a given substitute', function() {
+      var name = 'test';
+      var type = strategies.TYPES.SERVICE;
+      var service = {
+        startup: function() {}
+      };
+      var stub = {
+        stub: function() {}
+      };
+      registry.register(name, type, service);
+      registry.activate();
+      registry.get(name).should.have.property('instance', service);
+      registry.stub(name, stub);
+      registry.get(name).should.have.property('instance', stub);
+    });
+
+    it('throws an error when attempting to stub dependency that is not available and/or active', function() {
+      var name = 'test';
+      var type = strategies.TYPES.SERVICE;
+      var service = {
+        startup: function() {}
+      };
+      var stub = {
+        stub: function() {}
+      };
+      registry.register(name, type, service);
+      (function() {
+        registry.stub(name, stub);
+      }).should.throw('Could not stub as no active dependency was not found for name "test"');
+    });
+
+  });
+
   describe('unregister()', function() {
 
     it('unregisters a dependency correctly', function() {
