@@ -3,13 +3,15 @@ module.exports = function(grunt) {
   // Plugin Registration
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jscs');
+  grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
 
   // Task Registration
-  grunt.registerTask('default', ['test']);
+  grunt.registerTask('default', ['test', 'doc']);
   grunt.registerTask('test', ['test:quality', 'test:code']);
   grunt.registerTask('test:quality', ['jscs', 'jshint']);
   grunt.registerTask('test:code', ['mocha_istanbul']);
+  grunt.registerTask('doc', ['jsdoc']);
 
   // Project Configuration
   grunt.initConfig({
@@ -30,7 +32,6 @@ module.exports = function(grunt) {
 
     // Tests ---------------------------------
 
-
     mocha_istanbul: {
       all: {
         src: [
@@ -41,6 +42,17 @@ module.exports = function(grunt) {
         options: {
           coverageFolder: 'coverage',
           reportFormats: ['html']
+        }
+      }
+    },
+
+    // Documentation -------------------------
+
+    jsdoc: {
+      dist: {
+        src: ['lib/*.js'],
+        options: {
+          destination: 'doc'
         }
       }
     }

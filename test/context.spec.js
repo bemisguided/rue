@@ -27,7 +27,7 @@ describe('./lib/context.js', function() {
       // emit()
       context.emit('eventName');
 
-      eventEmitter.emit.calledWith(CONTEXT_NAME + ':eventName');
+      eventEmitter.emit.calledWith(CONTEXT_NAME + ':eventName').should.be.true();
     });
 
     it('emits to the event namespaced with paremters to the event emitter', function() {
@@ -37,7 +37,7 @@ describe('./lib/context.js', function() {
       // emit()
       context.emit('eventName', 'test1', 'test2');
 
-      eventEmitter.emit.calledWith(CONTEXT_NAME + ':eventName', 'test1', 'test2');
+      eventEmitter.emit.calledWith(CONTEXT_NAME + ':eventName', 'test1', 'test2').should.be.true();
     });
 
     it('throws an error when no event name parameter given', function() {
@@ -45,6 +45,19 @@ describe('./lib/context.js', function() {
       (function() {
         context.emit();
       }).should.throw('Illegal argument event is required');
+    });
+
+  });
+
+  describe('exists()', function() {
+
+    it('return the exists indicator for a given name', function() {
+      // setup
+      registry.exists = sinon.stub();
+      registry.exists.withArgs('service').returns(true);
+
+      // get()
+      context.exists('service').should.be.true();
     });
 
   });

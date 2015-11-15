@@ -59,6 +59,13 @@ describe('./lib/reg.js', function() {
       registry.get(name, type).should.have.property('instance', service2);
     });
 
+    it('throws an error when attempting to active profiles when there is already an active set of profiles', function() {
+      registry.activate();
+      (function() {
+        registry.activate();
+      }).should.throw('Illegal state profiles are active');
+    })
+
   });
 
   describe('deactivate()', function() {
@@ -72,7 +79,13 @@ describe('./lib/reg.js', function() {
       registry.register(name, type, service);
       registry.activate();
       registry.deactivate();
-      registry.exists(name, type).should.be.false();
+      registry.isActive().should.be.false();
+    });
+
+    it('throws error when attempting to deactivate when no profiles are active', function() {
+      (function() {
+        registry.deactivate();
+      }).should.throw('');
     });
 
   });
@@ -98,6 +111,13 @@ describe('./lib/reg.js', function() {
     it('should return false if the active dependency for a given name and optionally type does not exist', function() {
       registry.exists('other').should.be.false();
       registry.exists(name, strategies.TYPES.FACTORY).should.be.false();
+    });
+
+    it('throws error when attempting use when no profiles are active', function() {
+      registry.deactivate();
+      (function() {
+        registry.exists('test');
+      }).should.throw('Illegal state no active profiles');
     });
 
   });
@@ -127,6 +147,13 @@ describe('./lib/reg.js', function() {
       (function() {
         registry.get(name, strategies.TYPES.FACTORY);
       }).should.throw('Dependency does not exist named "test" of type "factory"');
+    });
+
+    it('throws error when attempting use when no profiles are active', function() {
+      registry.deactivate();
+      (function() {
+        registry.get('test');
+      }).should.throw('Illegal state no active profiles');
     });
 
   });
@@ -234,9 +261,17 @@ describe('./lib/reg.js', function() {
         startup: function() {}
       };
       registry.register(name1, type, service1);
-      registry.register(name2, type, service2);
+      registry.register(name2, type, service2, 'profile');
+      registry.activate();
       registry.list().should.be.Array();
-      registry.list().length.should.be.eql(0);
+      registry.list().length.should.be.eql(1);
+      registry.list()[0].should.have.property('instance', service1);
+    });
+
+    it('throws error when attempting use when no profiles are active', function() {
+      (function() {
+        registry.list();
+      }).should.throw('Illegal state no active profiles');
     });
 
   });
@@ -320,6 +355,13 @@ describe('./lib/reg.js', function() {
       registry.list()[1].should.have.property('instance', service2);
     });
 
+    it('throws error when attempting register when profiles are active', function() {
+      registry.activate();
+      (function() {
+        registry.register('test', 'fsd', {});
+      }).should.throw('Illegal state profiles are active');
+    });
+
   });
 
   describe('restore()', function() {
@@ -358,6 +400,12 @@ describe('./lib/reg.js', function() {
       }).should.throw('Stubbed dependency could not be restored for name "test"');
     });
 
+    it('throws error when attempting use when no profiles are active', function() {
+      (function() {
+        registry.restore('test');
+      }).should.throw('Illegal state no active profiles');
+    });
+
   });
 
   describe('stub()', function() {
@@ -387,10 +435,17 @@ describe('./lib/reg.js', function() {
       var stub = {
         stub: function() {}
       };
-      registry.register(name, type, service);
+      registry.register(name, type, service, 'profile');
+      registry.activate();
       (function() {
         registry.stub(name, stub);
       }).should.throw('Could not stub as no active dependency was not found for name "test"');
+    });
+
+    it('throws error when attempting use when no profiles are active', function() {
+      (function() {
+        registry.stub('test', {});
+      }).should.throw('Illegal state no active profiles');
     });
 
   });
@@ -411,6 +466,13 @@ describe('./lib/reg.js', function() {
 
       registry.unregister(name);
       registry.getRegistrations(name).length.should.be.eql(0);
+    });
+
+    it('throws error when attempting unregister when profiles are active', function() {
+      registry.activate();
+      (function() {
+        registry.unregister('test');
+      }).should.throw('Illegal state profiles are active');
     });
 
   });

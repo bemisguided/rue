@@ -200,7 +200,7 @@ describe('./strategies/factory_strategy.js', function() {
         })
         .done();
     });
-    
+
   });
 
 });
