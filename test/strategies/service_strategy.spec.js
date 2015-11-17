@@ -1,4 +1,3 @@
-var registry = appRequire('./registry');
 var strategy = appRequire('./strategies/service_strategy');
 
 describe('./strategies/service_strategy.js', function() {
@@ -29,11 +28,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STOPPED
+        state: strategy.STATES.STOPPED
       };
       strategy.startup(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STARTED);
+          dependency.state.should.be.eql(strategy.STATES.STARTED);
           done();
         })
         .done();
@@ -55,11 +54,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STOPPED
+        state: strategy.STATES.STOPPED
       };
       strategy.startup(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STARTED);
+          dependency.state.should.be.eql(strategy.STATES.STARTED);
           spy.calledOnce.should.be.true();
           done();
         })
@@ -82,11 +81,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STOPPED
+        state: strategy.STATES.STOPPED
       };
       strategy.startup(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STARTED);
+          dependency.state.should.be.eql(strategy.STATES.STARTED);
           spy.calledWith(config).should.be.true();
           done();
         })
@@ -112,11 +111,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STOPPED
+        state: strategy.STATES.STOPPED
       };
       strategy.startup(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STARTED);
+          dependency.state.should.be.eql(strategy.STATES.STARTED);
           spy.calledWith(config).should.be.true();
           done();
         })
@@ -136,7 +135,7 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STOPPED
+        state: strategy.STATES.STOPPED
       };
       strategy.startup(scope, dependency)
         .catch(function(err) {
@@ -159,7 +158,7 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STARTED
+        state: strategy.STATES.STARTED
       };
       strategy.startup(scope, dependency)
         .catch(function(err) {
@@ -183,11 +182,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STARTED
+        state: strategy.STATES.STARTED
       };
       strategy.shutdown(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STOPPED);
+          dependency.state.should.be.eql(strategy.STATES.STOPPED);
           done();
         })
         .done();
@@ -209,11 +208,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STARTED
+        state: strategy.STATES.STARTED
       };
       strategy.shutdown(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STOPPED);
+          dependency.state.should.be.eql(strategy.STATES.STOPPED);
           spy.calledOnce.should.be.true();
           done();
         })
@@ -236,11 +235,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STARTED
+        state: strategy.STATES.STARTED
       };
       strategy.shutdown(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STOPPED);
+          dependency.state.should.be.eql(strategy.STATES.STOPPED);
           spy.calledWith(config).should.be.true();
           done();
         })
@@ -266,11 +265,11 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STARTED
+        state: strategy.STATES.STARTED
       };
       strategy.shutdown(scope, dependency)
         .then(function(dependency) {
-          dependency.state.should.be.eql(registry.STATES.STOPPED);
+          dependency.state.should.be.eql(strategy.STATES.STOPPED);
           spy.calledWith(config).should.be.true();
           done();
         })
@@ -290,7 +289,7 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STARTED
+        state: strategy.STATES.STARTED
       };
       strategy.shutdown(scope, dependency)
         .catch(function(err) {
@@ -313,7 +312,7 @@ describe('./strategies/service_strategy.js', function() {
       var dependency = {
         name: 'test',
         instance: service,
-        state: registry.STATES.STOPPED
+        state: strategy.STATES.STOPPED
       };
       strategy.shutdown(scope, dependency)
         .catch(function(err) {

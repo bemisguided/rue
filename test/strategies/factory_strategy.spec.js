@@ -1,4 +1,3 @@
-var registry = appRequire('./registry');
 var strategy = appRequire('./strategies/factory_strategy');
 
 describe('./strategies/factory_strategy.js', function() {

@@ -1,7 +1,7 @@
-var Registry = appRequire('./reg.js');
+var Registry = appRequire('./registry');
 var strategies = appRequire('./strategies');
 
-describe('./lib/reg.js', function() {
+describe('./lib/registry.js', function() {
 
   var registry;
 
