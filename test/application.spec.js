@@ -15,6 +15,9 @@ describe('./application.js', function() {
 
   describe('activate()', function() {
 
+    var config;
+    var logger;
+    var service;
     var startupSpy;
 
     function _stubDependency(name, instance) {
@@ -31,17 +34,20 @@ describe('./application.js', function() {
 
     beforeEach(function() {
       startupSpy = sinon.spy();
-      var config = {
+      config = {
+        config: 'value',
         startup: function(context) {
           startupSpy(1, context);
         }
       };
-      var logger = {
+      logger = {
+        logger: 'value',
         startup: function(context) {
           startupSpy(2, context);
         }
       };
-      var service = {
+      service = {
+        service: 'value',
         startup: function(context) {
           startupSpy(3, context);
         }
@@ -73,6 +79,19 @@ describe('./application.js', function() {
           startupSpy.secondCall.args[1].should.have.property('name', '@logger');
           application.context('service').should.have.property('name', 'service');
           startupSpy.thirdCall.args[1].should.have.property('name', 'service');
+
+          // Assert direct bound dependencies (i.e. @name) are bound directly to context objects
+          application.context('@config').should.have.property('config', config);
+          application.context('@config').should.have.property('logger', logger);
+          application.context('@config').should.not.have.property('service', service);
+
+          application.context('@logger').should.have.property('config', config);
+          application.context('@logger').should.have.property('logger', logger);
+          application.context('@logger').should.not.have.property('service', service);
+
+          application.context('service').should.have.property('config', config);
+          application.context('service').should.have.property('logger', logger);
+          application.context('service').should.not.have.property('service', service);
           done();
         })
         .done();
@@ -83,6 +102,9 @@ describe('./application.js', function() {
   describe('deactivate()', function() {
 
     var startupSpy;
+    var config;
+    var logger;
+    var service;
 
     function _stubDependency(name, instance) {
       registry.exists.withArgs(name).returns(true);
@@ -98,17 +120,20 @@ describe('./application.js', function() {
 
     beforeEach(function() {
       startupSpy = sinon.spy();
-      var config = {
+      config = {
+        config: 'value',
         shutdown: function(context) {
           startupSpy(3, context);
         }
       };
-      var logger = {
+      logger = {
+        logger: 'logger',
         shutdown: function(context) {
           startupSpy(2, context);
         }
       };
-      var service = {
+      service = {
+        service: 'service',
         shutdown: function(context) {
           startupSpy(1, context);
         }
@@ -136,6 +161,17 @@ describe('./application.js', function() {
           startupSpy.firstCall.args[1].should.have.property('name', 'service');
           startupSpy.secondCall.args[1].should.have.property('name', '@logger');
           startupSpy.thirdCall.args[1].should.have.property('name', '@config');
+
+          // Assert direct bound dependencies (i.e. @name) are unbound directly from context objects
+          application.context('@config').should.not.have.property('config', config);
+          application.context('@config').should.not.have.property('logger', logger);
+
+          application.context('@logger').should.not.have.property('config', config);
+          application.context('@logger').should.not.have.property('logger', logger);
+
+          application.context('service').should.not.have.property('config', config);
+          application.context('service').should.not.have.property('logger', logger);
+
           done();
         })
         .done();

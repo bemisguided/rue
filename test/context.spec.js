@@ -201,4 +201,33 @@ describe('./lib/context.js', function() {
 
   });
 
+  describe('on()', function() {
+
+    it('attaches a callback function for a given event to the event emitter', function() {
+      // setup
+      eventEmitter.on = sinon.stub();
+      var fn = function() {};
+
+      // emit()
+      context.on('eventName', fn);
+
+      eventEmitter.on.calledWith('eventName', fn).should.be.true();
+    });
+
+    it('throws an error when no event name parameter given', function() {
+      // emit()
+      (function() {
+        context.on();
+      }).should.throw('Illegal arguments event and callback are required');
+    });
+
+    it('throws an error when no callback parameter given', function() {
+      // emit()
+      (function() {
+        context.on('test');
+      }).should.throw('Illegal arguments event and callback are required');
+    });
+
+  });
+
 });
