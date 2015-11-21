@@ -2,7 +2,7 @@ var profileMatcher = appRequire('./utils/profile_matcher');
 
 describe('./utils/profile_matcher.js', function() {
 
-  it('null/undefined profile that should not match target profiles', function() {
+  it('null/undefined profile that should match target profiles', function() {
     profileMatcher().should.be.true();
     profileMatcher(null, null).should.be.true();
     profileMatcher(null, []).should.be.true();
@@ -14,12 +14,12 @@ describe('./utils/profile_matcher.js', function() {
   });
 
   it('non-array profile that should match target profiles', function() {
+    profileMatcher('test', null).should.be.true();
     profileMatcher('test', 'test').should.be.true();
     profileMatcher('test', ['test', 'other']).should.be.true();
   });
 
   it('non-array profile that should not match target profiles', function() {
-    profileMatcher('test', null).should.be.false();
     profileMatcher('test', 'other').should.be.false();
     profileMatcher('test', ['some', 'other']).should.be.false();
   });

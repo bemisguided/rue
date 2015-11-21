@@ -192,10 +192,13 @@ describe('./lib/registry.js', function() {
       registry.register(name, type, service);
       registry.register(name, type, otherservice, 'profile');
       registry.getRegistrations(name, 'profile').should.be.Array();
-      registry.getRegistrations(name, 'profile').length.should.be.eql(1);
+      registry.getRegistrations(name, 'profile').length.should.be.eql(2);
       registry.getRegistrations(name, 'profile')[0].should.have.property('name', name);
       registry.getRegistrations(name, 'profile')[0].should.have.property('type', type);
-      registry.getRegistrations(name, 'profile')[0].should.have.property('instance', otherservice);
+      registry.getRegistrations(name, 'profile')[0].should.have.property('instance', service);
+      registry.getRegistrations(name, 'profile')[1].should.have.property('name', name);
+      registry.getRegistrations(name, 'profile')[1].should.have.property('type', type);
+      registry.getRegistrations(name, 'profile')[1].should.have.property('instance', otherservice);
     });
 
     it('returns registrations for a given name matching a specified list of profiles', function() {
@@ -211,10 +214,13 @@ describe('./lib/registry.js', function() {
       registry.register(name, type, service);
       registry.register(name, type, otherservice, 'profile');
       registry.getRegistrations(name, ['profile', 'other']).should.be.Array();
-      registry.getRegistrations(name, ['profile', 'other']).length.should.be.eql(1);
+      registry.getRegistrations(name, ['profile', 'other']).length.should.be.eql(2);
       registry.getRegistrations(name, ['profile', 'other'])[0].should.have.property('name', name);
       registry.getRegistrations(name, ['profile', 'other'])[0].should.have.property('type', type);
-      registry.getRegistrations(name, ['profile', 'other'])[0].should.have.property('instance', otherservice);
+      registry.getRegistrations(name, ['profile', 'other'])[0].should.have.property('instance', service);
+      registry.getRegistrations(name, ['profile', 'other'])[1].should.have.property('name', name);
+      registry.getRegistrations(name, ['profile', 'other'])[1].should.have.property('type', type);
+      registry.getRegistrations(name, ['profile', 'other'])[1].should.have.property('instance', otherservice);
     });
 
     it('returns an empty array for a given name with no matching dependencies', function() {
