@@ -339,6 +339,110 @@ describe('./container_entries.js', function () {
       expect(iterator.next().value).to.equal(name1);
     });
 
+    it('returns an ordered set of ModuleEntry names with separate dependency graphs', function () {
+      // Setup
+      let name1 = 'test1';
+      let module1 = 'module1';
+      let name2 = 'test2';
+      let module2 = 'module2';
+      let name3 = 'test3';
+      let module3 = 'module3';
+      let name4 = 'test4';
+      let module4 = 'module4';
+      containerEntry.addModuleEntry(name1, module1, [name2]);
+      containerEntry.addModuleEntry(name2, module2, []);
+      containerEntry.addModuleEntry(name3, module3, []);
+      containerEntry.addModuleEntry(name4, module4, [name3]);
+
+      // Assert
+      let dependenciesOrder = containerEntry.resolveDependencyOrder();
+      let iterator = dependenciesOrder.values();
+      expect(iterator.next().value).to.equal(name2);
+      expect(iterator.next().value).to.equal(name1);
+      expect(iterator.next().value).to.equal(name3);
+      expect(iterator.next().value).to.equal(name4);
+    });
+
+    it('returns an ordered set of ModuleEntry names with profiles provided', function () {
+      // Setup
+      let name1 = 'test1';
+      let module1 = 'module1';
+      let name2 = 'test2';
+      let module2 = 'module2';
+      let name3 = 'test3';
+      let module3 = 'module3';
+      let profile1 = 'profile1';
+      let profile2 = 'profile2';
+      containerEntry.addModuleEntry(name1, module1, [name2, name3]);
+      containerEntry.addModuleEntry(name2, module2, [name3], profile2);
+      containerEntry.addModuleEntry(name3, module3, [], profile1);
+
+      // Assert
+      let dependenciesOrder = containerEntry.resolveDependencyOrder([profile1, profile2]);
+      let iterator = dependenciesOrder.values();
+      expect(iterator.next().value).to.equal(name3);
+      expect(iterator.next().value).to.equal(name2);
+      expect(iterator.next().value).to.equal(name1);
+    });
+
+    it('throws error when a dependency cannot be resolved', function () {
+      // Setup
+      let name1 = 'test1';
+      let module1 = 'module1';
+      let name2 = 'test2';
+      let module2 = 'module2';
+      let name3 = 'test3';
+      let module3 = 'module3';
+      containerEntry.addModuleEntry(name1, module1, [name2, name3]);
+      containerEntry.addModuleEntry(name2, module2, [name3]);
+
+      // Assert
+      try {
+        containerEntry.resolveDependencyOrder();
+      } catch (e) {
+        expect(e.message).to.equal('Dependency not available: name=test3 profiles=undefined');
+      }
+    });
+    
+    it('throws error when a dependency cannot be resolved because the profile is not provided', function () {
+      // Setup
+      let name1 = 'test1';
+      let module1 = 'module1';
+      let name2 = 'test2';
+      let module2 = 'module2';
+      let name3 = 'test3';
+      let module3 = 'module3';
+      let profile1 = 'profile1';
+      let profile2 = 'profile2';
+      containerEntry.addModuleEntry(name1, module1, [name2, name3]);
+      containerEntry.addModuleEntry(name2, module2, [name3], profile2);
+      containerEntry.addModuleEntry(name3, module3, [], profile1);
+
+      // Assert
+      try {
+        containerEntry.resolveDependencyOrder([profile1]);
+      } catch (e) {
+        expect(e.message).to.equal('Dependency not available: name=test2 profiles=profile1,');
+      }
+    });
+
+    it('throws error when there is a circular dependency', function () {
+      // Setup
+      let name1 = 'test1';
+      let module1 = 'module1';
+      let name2 = 'test2';
+      let module2 = 'module2';
+      containerEntry.addModuleEntry(name1, module1, [name2]);
+      containerEntry.addModuleEntry(name2, module2, [name1]);
+
+      // Assert
+      try {
+        containerEntry.resolveDependencyOrder();
+      } catch (e) {
+        expect(e.message).to.equal('Circular dependency found: name=test2 dependency=test1');
+      }
+    });
+
   });
 
 });
