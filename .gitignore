@@ -1,6 +1,4 @@
 # Logs
-logs
-*.log
 npm-debug.log*
 
 # Runtime data
@@ -17,8 +15,8 @@ coverage
 # Generated documentation folder
 doc
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
+# Distribution folder
+dist
 
 # node-waf configuration
 .lock-wscript

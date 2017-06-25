@@ -1,3 +1,2 @@
-test/**/_*.js
 test/**/*.spec.js
 --recursive
