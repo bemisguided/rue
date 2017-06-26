@@ -5,6 +5,7 @@ import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
 import ProfileEntry from '../../lib/container/ProfileEntry';
 import ContainerEntry from '../../lib/container/ContainerEntry';
+import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
 
 describe('./ProfileEntry.spec.js', () => {
 
@@ -19,8 +20,7 @@ describe('./ProfileEntry.spec.js', () => {
     it('adds a ContainerEntry to the hash of content entries', () => {
       // Setup
       let name = 'name';
-      let containerEntry1 = new ContainerEntry(name, () => {
-      });
+      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''));
 
       // Execute
       profileEntry.addContainerEntry(containerEntry1);
@@ -37,8 +37,7 @@ describe('./ProfileEntry.spec.js', () => {
     it('returns a ContainerEntry by a provided name from the hash of content entries', () => {
       // Setup
       let name = 'name';
-      let containerEntry1 = new ContainerEntry(name, () => {
-      });
+      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''));
       profileEntry.containerEntries[name] = containerEntry1;
 
       // Execute
@@ -56,10 +55,8 @@ describe('./ProfileEntry.spec.js', () => {
       // Setup
       let name1 = 'name1';
       let name2 = 'name2';
-      let containerEntry1 = new ContainerEntry(name1, () => {
-      });
-      let containerEntry2 = new ContainerEntry(name2, () => {
-      });
+      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''));
+      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''));
       profileEntry.containerEntries[name1] = containerEntry1;
       profileEntry.containerEntries[name2] = containerEntry2;
 
@@ -79,10 +76,8 @@ describe('./ProfileEntry.spec.js', () => {
       // Setup
       let name1 = 'name1';
       let name2 = 'name2';
-      let containerEntry1 = new ContainerEntry(name1, () => {
-      });
-      let containerEntry2 = new ContainerEntry(name2, () => {
-      });
+      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''));
+      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''));
       profileEntry.containerEntries[name1] = containerEntry1;
       profileEntry.containerEntries[name2] = containerEntry2;
 

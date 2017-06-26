@@ -5,6 +5,7 @@ import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
 import DependencyResolver from '../../lib/container/DependencyResolver';
 import ContainerEntry from '../../lib/container/ContainerEntry';
+import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
 
 describe('./DependencyResolver.js', () => {
 
@@ -21,9 +22,9 @@ describe('./DependencyResolver.js', () => {
     it('returns an ordered set of ContentEntries with no dependencies', () => {
       // Setup
       let name = 'test';
-      let module = 'module';
+      let resolver = new ContainerEntryResolver('resolver');
       let dependencies = [];
-      let containerEntry = new ContainerEntry(name, module, dependencies);
+      let containerEntry = new ContainerEntry(name, resolver, dependencies);
       containerEntries.set(name, containerEntry);
 
       // Execute
@@ -37,11 +38,11 @@ describe('./DependencyResolver.js', () => {
     it('returns an ordered set of ContentEntries with a single dependency', () => {
       // Setup
       let name1 = 'test1';
-      let module1 = 'module1';
+      let resolver1 = new ContainerEntryResolver('resolver');
       let name2 = 'test2';
-      let module2 = 'module2';
-      let containerEntry1 = new ContainerEntry(name1, module, [name2]);
-      let containerEntry2 = new ContainerEntry(name2, module, []);
+      let resolver2 = new ContainerEntryResolver('resolver');
+      let containerEntry1 = new ContainerEntry(name1, resolver1, [name2]);
+      let containerEntry2 = new ContainerEntry(name2, resolver2, []);
       containerEntries.set(name1, containerEntry1);
       containerEntries.set(name2, containerEntry2);
 
@@ -58,14 +59,14 @@ describe('./DependencyResolver.js', () => {
     it('returns an ordered set of ContentEntries with multiple dependencies', () => {
       // Setup
       let name1 = 'test1';
-      let module1 = 'module1';
+      let resolver1 = new ContainerEntryResolver('resolver');
       let name2 = 'test2';
-      let module2 = 'module2';
+      let resolver2 = new ContainerEntryResolver('resolver');
       let name3 = 'test3';
-      let module3 = 'module3';
-      let containerEntry1 = new ContainerEntry(name1, module1, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, module2, []);
-      let containerEntry3 = new ContainerEntry(name3, module3, []);
+      let resolver3 = new ContainerEntryResolver('resolver');
+      let containerEntry1 = new ContainerEntry(name1, resolver1, [name2, name3]);
+      let containerEntry2 = new ContainerEntry(name2, resolver2, []);
+      let containerEntry3 = new ContainerEntry(name3, resolver3, []);
       containerEntries.set(name1, containerEntry1);
       containerEntries.set(name2, containerEntry2);
       containerEntries.set(name3, containerEntry3);
@@ -83,14 +84,14 @@ describe('./DependencyResolver.js', () => {
     it('returns an ordered set of ContentEntries with multiple dependencies with dependencies', () => {
       // Setup
       let name1 = 'test1';
-      let module1 = 'module1';
+      let resolver1 = new ContainerEntryResolver('resolver');
       let name2 = 'test2';
-      let module2 = 'module2';
+      let resolver2 = new ContainerEntryResolver('resolver');
       let name3 = 'test3';
-      let module3 = 'module3';
-      let containerEntry1 = new ContainerEntry(name1, module1, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, module2, [name3]);
-      let containerEntry3 = new ContainerEntry(name3, module3, []);
+      let resolver3 = new ContainerEntryResolver('resolver');
+      let containerEntry1 = new ContainerEntry(name1, resolver1, [name2, name3]);
+      let containerEntry2 = new ContainerEntry(name2, resolver2, [name3]);
+      let containerEntry3 = new ContainerEntry(name3, resolver3, []);
       containerEntries.set(name1, containerEntry1);
       containerEntries.set(name2, containerEntry2);
       containerEntries.set(name3, containerEntry3);
@@ -109,17 +110,17 @@ describe('./DependencyResolver.js', () => {
     it('returns an ordered set of ContentEntries with separate dependency graphs', () => {
       // Setup
       let name1 = 'test1';
-      let module1 = 'module1';
+      let resolver1 = new ContainerEntryResolver('resolver');
       let name2 = 'test2';
-      let module2 = 'module2';
+      let resolver2 = new ContainerEntryResolver('resolver');
       let name3 = 'test3';
-      let module3 = 'module3';
+      let resolver3 = new ContainerEntryResolver('resolver');
       let name4 = 'test4';
-      let module4 = 'module4';
-      let containerEntry1 = new ContainerEntry(name1, module1, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, module2, []);
-      let containerEntry3 = new ContainerEntry(name3, module3, []);
-      let containerEntry4 = new ContainerEntry(name4, module4, [name3]);
+      let resolver4 = new ContainerEntryResolver('resolver');
+      let containerEntry1 = new ContainerEntry(name1, resolver1, [name2, name3]);
+      let containerEntry2 = new ContainerEntry(name2, resolver2, []);
+      let containerEntry3 = new ContainerEntry(name3, resolver3, []);
+      let containerEntry4 = new ContainerEntry(name4, resolver4, [name3]);
       containerEntries.set(name1, containerEntry1);
       containerEntries.set(name2, containerEntry2);
       containerEntries.set(name3, containerEntry3);
@@ -139,13 +140,12 @@ describe('./DependencyResolver.js', () => {
     it('throws error when a dependency cannot be resolved', () => {
       // Setup
       let name1 = 'test1';
-      let module1 = 'module1';
+      let resolver1 = new ContainerEntryResolver('resolver');
       let name2 = 'test2';
-      let module2 = 'module2';
+      let resolver2 = new ContainerEntryResolver('resolver');
       let name3 = 'test3';
-      let module3 = 'module3';
-      let containerEntry1 = new ContainerEntry(name1, module1, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, module2, [name3]);
+      let containerEntry1 = new ContainerEntry(name1, resolver1, [name2, name3]);
+      let containerEntry2 = new ContainerEntry(name2, resolver2, [name3]);
       containerEntries.set(name1, containerEntry1);
       containerEntries.set(name2, containerEntry2);
 
@@ -161,11 +161,11 @@ describe('./DependencyResolver.js', () => {
     it('throws error when there is a circular dependency', function () {
       // Setup
       let name1 = 'test1';
-      let module1 = 'module1';
+      let resolver1 = new ContainerEntryResolver('resolver');
       let name2 = 'test2';
-      let module2 = 'module2';
-      let containerEntry1 = new ContainerEntry(name1, module1, [name2]);
-      let containerEntry2 = new ContainerEntry(name2, module2, [name1]);
+      let resolver2 = new ContainerEntryResolver('resolver');
+      let containerEntry1 = new ContainerEntry(name1, resolver1, [name2]);
+      let containerEntry2 = new ContainerEntry(name2, resolver2, [name1]);
       containerEntries.set(name1, containerEntry1);
       containerEntries.set(name2, containerEntry2);
 
