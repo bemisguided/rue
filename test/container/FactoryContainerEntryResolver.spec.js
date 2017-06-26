@@ -17,16 +17,26 @@
  *
  * @flow
  */
-export default class ContainerEntryResolver {
+import { beforeEach, describe, it } from 'mocha';
+import { expect } from 'chai';
+import FactoryContainerEntryResolver from '../../lib/container/FactoryContainerEntryResolver';
+describe('./container/FactoryContainerEntryResolver.js', () => {
 
-  target: any;
+  it('resolves a factory method by forwarding dependencies', () => {
+    // Setup
+    let dependency = 'hello';
+    let factory = (value) => {
+      return {
+        value: value,
+      };
+    };
 
-  constructor(target: any) {
-    this.target = target;
-  }
+    // Execute
+    let resolver = new FactoryContainerEntryResolver(factory);
+    let result = resolver.resolve(dependency);
 
-  resolve(...dependencies: any) {
-    return this.target;
-  }
+    // Assert
+    expect(result.value).to.equal(dependency);
+  });
 
-}
+});
