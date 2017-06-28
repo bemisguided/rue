@@ -20,7 +20,7 @@
 import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
 import ContainerManager from '../../lib/container/ContainerManager';
-import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
+import ContainerEntryResolver from '../../lib/container/resolvers/ContainerEntryResolver';
 
 describe('./container/ContainerManager.js', () => {
 
@@ -32,11 +32,55 @@ describe('./container/ContainerManager.js', () => {
 
   describe('addContainerEntry()', () => {
 
+    it('creates and adds a ContainerEntry with a default setting of singleton', () => {
+      // Setup
+      let name = 'test';
+      let resolver = new ContainerEntryResolver('resolver');
+      let dependencies = ['dependencies'];
+
+      // Execute
+      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies);
+
+      // Assert
+      let profileEntry = containerManager.profileManager.getDefaultProfileEntry();
+      let containerEntry2 = profileEntry.containerEntries[name];
+      expect(containerEntry2).to.not.be.undefined;
+      expect(containerEntry2).to.not.be.null;
+      expect(containerEntry2.name).to.equal(name);
+      expect(containerEntry2.resolver).to.equal(resolver);
+      expect(containerEntry2.dependencies).to.equal(dependencies);
+      expect(containerEntry2.singleton).to.equal(true);
+      expect(containerEntry2).to.equal(containerEntry1);
+    });
+
+    it('creates and adds a ContainerEntry with a setting of singleton as provided', () => {
+      // Setup
+      let name = 'test';
+      let resolver = new ContainerEntryResolver('resolver');
+      let dependencies = ['dependencies'];
+      let singleton = false;
+
+      // Execute
+      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, singleton);
+
+      // Assert
+      let profileEntry = containerManager.profileManager.getDefaultProfileEntry();
+      let containerEntry2 = profileEntry.containerEntries[name];
+      expect(containerEntry2).to.not.be.undefined;
+      expect(containerEntry2).to.not.be.null;
+      expect(containerEntry2.name).to.equal(name);
+      expect(containerEntry2.resolver).to.equal(resolver);
+      expect(containerEntry2.dependencies).to.equal(dependencies);
+      expect(containerEntry2.singleton).to.equal(singleton);
+      expect(containerEntry2).to.equal(containerEntry1);
+    });
+
     it('creates and adds a ContainerEntry to the default profile when no profiles are provided', () => {
       // Setup
       let name = 'test';
       let resolver = new ContainerEntryResolver('resolver');
       let dependencies = ['dependencies'];
+      let singleton = true;
 
       // Execute
       let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies);
@@ -57,12 +101,13 @@ describe('./container/ContainerManager.js', () => {
       let name = 'test';
       let resolver = new ContainerEntryResolver('resolver');
       let dependencies = ['dependencies'];
+      let singleton = true;
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
 
       // Execute
-      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, profiles);
+      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, singleton, profiles);
 
       // Assert
       let profileEntry1 = containerManager.profileManager.getProfileEntry(profile1);
@@ -72,6 +117,7 @@ describe('./container/ContainerManager.js', () => {
       expect(containerEntry2.name).to.equal(name);
       expect(containerEntry2.resolver).to.equal(resolver);
       expect(containerEntry2.dependencies).to.equal(dependencies);
+      expect(containerEntry2.singleton).to.equal(singleton);
       expect(containerEntry2).to.equal(containerEntry1);
 
       let profileEntry2 = containerManager.profileManager.getProfileEntry(profile2);
@@ -116,7 +162,7 @@ describe('./container/ContainerManager.js', () => {
       let dependencies = ['dependencies'];
       let profile1 = 'profile1';
       let profiles = [profile1];
-      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, profiles);
+      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, true, profiles);
 
       // Execute
       let containerEntry2 = containerManager.getContainerEntry(name, profiles);
@@ -165,7 +211,7 @@ describe('./container/ContainerManager.js', () => {
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, profiles);
+      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, true, profiles);
 
       // Execute
       let containerEntry2 = containerManager.getContainerEntry(name, [profile2]);
@@ -190,7 +236,7 @@ describe('./container/ContainerManager.js', () => {
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, profiles);
+      let containerEntry1 = containerManager.addContainerEntry(name, resolver, dependencies, true, profiles);
 
       // Execute
       let containerEntry2 = containerManager.getContainerEntry(name, profiles);
@@ -216,8 +262,8 @@ describe('./container/ContainerManager.js', () => {
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      containerManager.addContainerEntry(name, resolver1, dependencies, [profile1]);
-      containerManager.addContainerEntry(name, resolver2, dependencies, [profile2]);
+      containerManager.addContainerEntry(name, resolver1, dependencies, true, [profile1]);
+      containerManager.addContainerEntry(name, resolver2, dependencies, true, [profile2]);
 
       // Assert
       try {
@@ -267,8 +313,8 @@ describe('./container/ContainerManager.js', () => {
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let containerEntry1 = containerManager.addContainerEntry(name1, resolver1, dependencies);
-      let containerEntry2 = containerManager.addContainerEntry(name2, resolver2, dependencies, [profile1]);
-      let containerEntry3 = containerManager.addContainerEntry(name2, resolver3, dependencies, [profile2]);
+      let containerEntry2 = containerManager.addContainerEntry(name2, resolver2, dependencies, true, [profile1]);
+      let containerEntry3 = containerManager.addContainerEntry(name2, resolver3, dependencies, true, [profile2]);
 
       // Assert
       let containerEntries = containerManager.getContainerEntries([profile1]);
@@ -284,7 +330,7 @@ describe('./container/ContainerManager.js', () => {
       let dependencies = ['dependencies'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
-      containerManager.addContainerEntry(name, resolver, dependencies, [profile1]);
+      containerManager.addContainerEntry(name, resolver, dependencies, true, [profile1]);
 
       // Assert
       let containerEntries = containerManager.getContainerEntries([profile2]);

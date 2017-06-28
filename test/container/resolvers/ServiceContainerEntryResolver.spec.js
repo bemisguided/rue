@@ -19,20 +19,22 @@
  */
 import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
-import FactoryContainerEntryResolver from '../../lib/container/FactoryContainerEntryResolver';
-describe('./container/FactoryContainerEntryResolver.js', () => {
+import ServiceContainerEntryResolver from '../../../lib/container/resolvers/ServiceContainerEntryResolver';
+describe('./container/ServiceContainerEntryResolver.js', () => {
 
-  it('resolves a factory method by forwarding dependencies', () => {
+  it('resolves a service class by forwarding dependencies to a constructor', () => {
     // Setup
     let dependency = 'hello';
-    let factory = (value) => {
-      return {
-        value: value,
-      };
-    };
+    class Service {
+      value: any;
+
+      constructor(value: any) {
+        this.value = value;
+      }
+    }
 
     // Execute
-    let resolver = new FactoryContainerEntryResolver(factory);
+    let resolver = new ServiceContainerEntryResolver(Service);
     let result = resolver.resolve(dependency);
 
     // Assert

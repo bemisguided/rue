@@ -21,7 +21,7 @@ import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
 import ProfileEntry from '../../lib/container/ProfileEntry';
 import ContainerEntry from '../../lib/container/ContainerEntry';
-import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
+import ContainerEntryResolver from '../../lib/container/resolvers/ContainerEntryResolver';
 
 describe('./container/ProfileEntry.js', () => {
 
@@ -36,7 +36,7 @@ describe('./container/ProfileEntry.js', () => {
     it('adds a ContainerEntry to the hash of content entries', () => {
       // Setup
       let name = 'name';
-      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''));
+      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''), true);
 
       // Execute
       profileEntry.addContainerEntry(containerEntry1);
@@ -53,7 +53,7 @@ describe('./container/ProfileEntry.js', () => {
     it('returns a ContainerEntry by a provided name from the hash of content entries', () => {
       // Setup
       let name = 'name';
-      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''));
+      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''), true);
       profileEntry.containerEntries[name] = containerEntry1;
 
       // Execute
@@ -71,8 +71,8 @@ describe('./container/ProfileEntry.js', () => {
       // Setup
       let name1 = 'name1';
       let name2 = 'name2';
-      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''));
-      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''));
+      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''), true);
+      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''), true);
       profileEntry.containerEntries[name1] = containerEntry1;
       profileEntry.containerEntries[name2] = containerEntry2;
 
@@ -92,8 +92,8 @@ describe('./container/ProfileEntry.js', () => {
       // Setup
       let name1 = 'name1';
       let name2 = 'name2';
-      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''));
-      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''));
+      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''), true);
+      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''), true);
       profileEntry.containerEntries[name1] = containerEntry1;
       profileEntry.containerEntries[name2] = containerEntry2;
 
