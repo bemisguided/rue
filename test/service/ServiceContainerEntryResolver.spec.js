@@ -19,7 +19,8 @@
  */
 import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
-import ServiceContainerEntryResolver from '../../../lib/container/resolvers/ServiceContainerEntryResolver';
+import ServiceContainerEntryResolver from '../../lib/service/ServiceContainerEntryResolver';
+
 describe('./container/ServiceContainerEntryResolver.js', () => {
 
   it('resolves a service class by forwarding dependencies to a constructor', () => {

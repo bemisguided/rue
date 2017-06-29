@@ -20,7 +20,7 @@
 import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
 import ContainerManager from '../../lib/container/ContainerManager';
-import ContainerEntryResolver from '../../lib/container/resolvers/ContainerEntryResolver';
+import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
 
 describe('./container/ContainerManager.js', () => {
 

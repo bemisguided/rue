@@ -21,7 +21,7 @@ import { beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
 import DependencyTraverser from '../../lib/container/DependencyTraverser';
 import ContainerEntry from '../../lib/container/ContainerEntry';
-import ContainerEntryResolver from '../../lib/container/resolvers/ContainerEntryResolver';
+import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
 
 describe('./container/DependencyTraverser.js', () => {
 
