@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import DependencyTraverser from '../../lib/container/DependencyTraverser';
 import ContainerEntry from '../../lib/container/ContainerEntry';
 import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
@@ -48,7 +46,7 @@ describe('./container/DependencyTraverser.js', () => {
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).to.equal(containerEntry);
+      expect(iterator.next().value).toEqual(containerEntry);
     });
 
     it('returns an ordered set of ContentEntries with a single dependency', () => {
@@ -67,8 +65,8 @@ describe('./container/DependencyTraverser.js', () => {
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).to.equal(containerEntry2);
-      expect(iterator.next().value).to.equal(containerEntry1);
+      expect(iterator.next().value).toEqual(containerEntry2);
+      expect(iterator.next().value).toEqual(containerEntry1);
     });
 
 
@@ -92,9 +90,9 @@ describe('./container/DependencyTraverser.js', () => {
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).to.equal(containerEntry2);
-      expect(iterator.next().value).to.equal(containerEntry3);
-      expect(iterator.next().value).to.equal(containerEntry1);
+      expect(iterator.next().value).toEqual(containerEntry2);
+      expect(iterator.next().value).toEqual(containerEntry3);
+      expect(iterator.next().value).toEqual(containerEntry1);
     });
 
     it('returns an ordered set of ContentEntries with multiple dependencies with dependencies', () => {
@@ -117,9 +115,9 @@ describe('./container/DependencyTraverser.js', () => {
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).to.equal(containerEntry3);
-      expect(iterator.next().value).to.equal(containerEntry2);
-      expect(iterator.next().value).to.equal(containerEntry1);
+      expect(iterator.next().value).toEqual(containerEntry3);
+      expect(iterator.next().value).toEqual(containerEntry2);
+      expect(iterator.next().value).toEqual(containerEntry1);
     });
 
 
@@ -147,10 +145,10 @@ describe('./container/DependencyTraverser.js', () => {
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).to.equal(containerEntry2);
-      expect(iterator.next().value).to.equal(containerEntry3);
-      expect(iterator.next().value).to.equal(containerEntry1);
-      expect(iterator.next().value).to.equal(containerEntry4);
+      expect(iterator.next().value).toEqual(containerEntry2);
+      expect(iterator.next().value).toEqual(containerEntry3);
+      expect(iterator.next().value).toEqual(containerEntry1);
+      expect(iterator.next().value).toEqual(containerEntry4);
     });
 
     it('throws error when a dependency cannot be resolved', () => {
@@ -170,7 +168,7 @@ describe('./container/DependencyTraverser.js', () => {
         dependencyTraverser.traverse();
       }
       catch (e) {
-        expect(e.message).to.equal('Dependency not available: name=test3');
+        expect(e.message).toEqual('Dependency not available: name=test3');
       }
     });
 
@@ -190,7 +188,7 @@ describe('./container/DependencyTraverser.js', () => {
         dependencyTraverser.traverse();
       }
       catch (e) {
-        expect(e.message).to.equal('Circular dependency found: name=test2 dependency=test1');
+        expect(e.message).toEqual('Circular dependency found: name=test2 dependency=test1');
       }
     });
 

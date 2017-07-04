@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import ProfileEntry from '../../lib/container/ProfileEntry';
 import ContainerEntry from '../../lib/container/ContainerEntry';
 import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
@@ -43,7 +41,7 @@ describe('./container/ProfileEntry.js', () => {
 
       // Assert
       let containerEntry2 = profileEntry.containerEntries[name];
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
   });
@@ -60,7 +58,7 @@ describe('./container/ProfileEntry.js', () => {
       let containerEntry2 = profileEntry.getContainerEntry(name);
 
       // Assert
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
   });
@@ -80,8 +78,8 @@ describe('./container/ProfileEntry.js', () => {
       let containerEntries = profileEntry.getContainerEntries();
 
       // Assert
-      expect(containerEntries.indexOf(containerEntry1)).to.be.greaterThan(-1);
-      expect(containerEntries.indexOf(containerEntry2)).to.be.greaterThan(-1);
+      expect(containerEntries.indexOf(containerEntry1)).toBeGreaterThan(-1);
+      expect(containerEntries.indexOf(containerEntry2)).toBeGreaterThan(-1);
     });
 
   });
@@ -101,8 +99,8 @@ describe('./container/ProfileEntry.js', () => {
       let containerEntries = profileEntry.getContainerNames();
 
       // Assert
-      expect(containerEntries.indexOf(name1)).to.be.greaterThan(-1);
-      expect(containerEntries.indexOf(name2)).to.be.greaterThan(-1);
+      expect(containerEntries.indexOf(name1)).toBeGreaterThan(-1);
+      expect(containerEntries.indexOf(name2)).toBeGreaterThan(-1);
     });
 
   });

@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import ContainerManager from '../../lib/container/ContainerManager';
 import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
 
@@ -44,13 +42,13 @@ describe('./container/ContainerManager.js', () => {
       // Assert
       let profileEntry = containerManager.profileManager.getDefaultProfileEntry();
       let containerEntry2 = profileEntry.containerEntries[name];
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2.singleton).to.equal(true);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2.singleton).toEqual(true);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('creates and adds a ContainerEntry with a setting of singleton as provided', () => {
@@ -66,13 +64,13 @@ describe('./container/ContainerManager.js', () => {
       // Assert
       let profileEntry = containerManager.profileManager.getDefaultProfileEntry();
       let containerEntry2 = profileEntry.containerEntries[name];
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2.singleton).to.equal(singleton);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2.singleton).toEqual(singleton);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('creates and adds a ContainerEntry to the default profile when no profiles are provided', () => {
@@ -88,12 +86,12 @@ describe('./container/ContainerManager.js', () => {
       // Assert
       let profileEntry = containerManager.profileManager.getDefaultProfileEntry();
       let containerEntry2 = profileEntry.containerEntries[name];
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('creates and adds a ContainerEntry multiple profiles when multiple profiles are provided', () => {
@@ -112,21 +110,21 @@ describe('./container/ContainerManager.js', () => {
       // Assert
       let profileEntry1 = containerManager.profileManager.getProfileEntry(profile1);
       let containerEntry2 = profileEntry1.containerEntries[name];
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2.singleton).to.equal(singleton);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2.singleton).toEqual(singleton);
+      expect(containerEntry2).toEqual(containerEntry1);
 
       let profileEntry2 = containerManager.profileManager.getProfileEntry(profile2);
       let containerEntry3 = profileEntry2.containerEntries[name];
-      expect(containerEntry3).to.not.be.undefined;
-      expect(containerEntry3).to.not.be.null;
-      expect(containerEntry3.name).to.equal(name);
-      expect(containerEntry3.resolver).to.equal(resolver);
-      expect(containerEntry3.dependencies).to.equal(dependencies);
+      expect(containerEntry3).not.toBeUndefined();
+      expect(containerEntry3).not.toBeNull();
+      expect(containerEntry3.name).toEqual(name);
+      expect(containerEntry3.resolver).toEqual(resolver);
+      expect(containerEntry3.dependencies).toEqual(dependencies);
     });
 
   });
@@ -144,15 +142,15 @@ describe('./container/ContainerManager.js', () => {
       let containerEntry2 = containerManager.getContainerEntry(name);
 
       // Assert
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
       if (!containerEntry2) {
         return;
       }
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('returns a ContainerEntry from the a single profile when a single profile is provided', () => {
@@ -168,15 +166,15 @@ describe('./container/ContainerManager.js', () => {
       let containerEntry2 = containerManager.getContainerEntry(name, profiles);
 
       // Assert
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
       if (!containerEntry2) {
         return;
       }
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('returns a ContainerEntry from the default profile when a single profile is provided', () => {
@@ -192,15 +190,15 @@ describe('./container/ContainerManager.js', () => {
       let containerEntry2 = containerManager.getContainerEntry(name, profiles);
 
       // Assert
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
       if (!containerEntry2) {
         return;
       }
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('returns a ContainerEntry from multiple profiles when multiple profiles are provided', () => {
@@ -217,15 +215,15 @@ describe('./container/ContainerManager.js', () => {
       let containerEntry2 = containerManager.getContainerEntry(name, [profile2]);
 
       // Assert
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
       if (!containerEntry2) {
         return;
       }
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('returns a ContainerEntry from the default profile when multiple profiles are provided (resolved the same ModuleEntry)', () => {
@@ -242,15 +240,15 @@ describe('./container/ContainerManager.js', () => {
       let containerEntry2 = containerManager.getContainerEntry(name, profiles);
 
       // Assert
-      expect(containerEntry2).to.not.be.undefined;
-      expect(containerEntry2).to.not.be.null;
+      expect(containerEntry2).not.toBeUndefined();
+      expect(containerEntry2).not.toBeNull();
       if (!containerEntry2) {
         return;
       }
-      expect(containerEntry2.name).to.equal(name);
-      expect(containerEntry2.resolver).to.equal(resolver);
-      expect(containerEntry2.dependencies).to.equal(dependencies);
-      expect(containerEntry2).to.equal(containerEntry1);
+      expect(containerEntry2.name).toEqual(name);
+      expect(containerEntry2.resolver).toEqual(resolver);
+      expect(containerEntry2.dependencies).toEqual(dependencies);
+      expect(containerEntry2).toEqual(containerEntry1);
     });
 
     it('throws error when different ContainerEntries are resolved from different profiles', () => {
@@ -270,7 +268,7 @@ describe('./container/ContainerManager.js', () => {
         containerManager.getContainerEntry(name, profiles);
       }
       catch (e) {
-        expect(e.message).to.equal('Duplicate dependencies found: name=test');
+        expect(e.message).toEqual('Duplicate dependencies found: name=test');
       }
     });
 
@@ -287,7 +285,7 @@ describe('./container/ContainerManager.js', () => {
 
       // Assert
       let containerEntries = containerManager.getContainerEntries();
-      expect(containerEntries.get(name)).to.equal(containerEntry);
+      expect(containerEntries.get(name)).toEqual(containerEntry);
     });
 
     it('returns a Map of ContainerEntries from the default profile a profile is provided', () => {
@@ -299,7 +297,7 @@ describe('./container/ContainerManager.js', () => {
 
       // Assert
       let containerEntries = containerManager.getContainerEntries(['profile']);
-      expect(containerEntries.get(name)).to.equal(containerEntry);
+      expect(containerEntries.get(name)).toEqual(containerEntry);
     });
 
     it('returns a Map of ContainerEntries with a ContainerEntry from a of provided profiles', () => {
@@ -318,9 +316,9 @@ describe('./container/ContainerManager.js', () => {
 
       // Assert
       let containerEntries = containerManager.getContainerEntries([profile1]);
-      expect(containerEntries.get(name1)).to.equal(containerEntry1);
-      expect(containerEntries.get(name2)).to.equal(containerEntry2);
-      expect(containerEntries.has(name2)).to.not.equal(containerEntry3);
+      expect(containerEntries.get(name1)).toEqual(containerEntry1);
+      expect(containerEntries.get(name2)).toEqual(containerEntry2);
+      expect(containerEntries.has(name2)).not.toEqual(containerEntry3);
     });
 
     it('returns a Map of ContainerEntries without a ContainerEntry when a profile is provided does not have it available', () => {
@@ -334,7 +332,7 @@ describe('./container/ContainerManager.js', () => {
 
       // Assert
       let containerEntries = containerManager.getContainerEntries([profile2]);
-      expect(containerEntries.has(name)).to.be.false;
+      expect(containerEntries.has(name)).toEqual(false);
     });
 
   });

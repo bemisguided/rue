@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import ProfileManager from '../../lib/container/ProfileManager';
 import ProfileEntry from '../../lib/container/ProfileEntry';
 
@@ -39,9 +37,9 @@ describe('./container/ProfileManager.js', () => {
 
       // Assert
       let profileEntry2 = profileManager.profileEntries[name];
-      expect(profileEntry1).to.not.be.undefined;
-      expect(profileEntry1).to.not.be.null;
-      expect(profileEntry2).to.equal(profileEntry1);
+      expect(profileEntry1).not.toBeUndefined();
+      expect(profileEntry1).not.toBeNull();
+      expect(profileEntry2).toEqual(profileEntry1);
     });
 
     it('returns the existing ProfileEntry for a provided name that already exists', () => {
@@ -54,7 +52,7 @@ describe('./container/ProfileManager.js', () => {
       let profileEntry2 = profileManager.addProfileEntry(name);
 
       // Assert
-      expect(profileEntry1).to.equal(profileEntry2);
+      expect(profileEntry1).toEqual(profileEntry2);
     });
 
   });
@@ -67,7 +65,7 @@ describe('./container/ProfileManager.js', () => {
       let profileEntry = profileManager.getProfileEntry(name);
 
       // Assert
-      expect(profileEntry).to.be.undefined;
+      expect(profileEntry).toBeUndefined();
     });
 
     it('returns the existing ProfileEntry for provided name ', function () {
@@ -80,7 +78,7 @@ describe('./container/ProfileManager.js', () => {
       let profileEntry2 = profileManager.getProfileEntry(name);
 
       // Assert
-      expect(profileEntry1).to.equal(profileEntry2);
+      expect(profileEntry1).toEqual(profileEntry2);
     });
 
   });
@@ -92,9 +90,9 @@ describe('./container/ProfileManager.js', () => {
       let profileEntry = profileManager.getDefaultProfileEntry();
 
       // Assert
-      expect(profileEntry).to.be.not.undefined;
-      expect(profileEntry).to.be.not.null;
-      expect(profileEntry.name).to.equal('');
+      expect(profileEntry).not.toBeUndefined();
+      expect(profileEntry).not.toBeNull();
+      expect(profileEntry.name).toEqual('');
     });
 
   });
@@ -109,8 +107,8 @@ describe('./container/ProfileManager.js', () => {
       let profileEntries = profileManager.resolveProfileEntries();
 
       // Assert
-      expect(profileEntries.size).to.equal(1);
-      expect(profileEntries.has(defaultProfileEntry)).to.be.true;
+      expect(profileEntries.size).toEqual(1);
+      expect(profileEntries.has(defaultProfileEntry)).toEqual(true);
     });
 
     it('resolves the default ProfileEntry in addition to provided profiles', () => {
@@ -123,9 +121,9 @@ describe('./container/ProfileManager.js', () => {
       let profileEntries = profileManager.resolveProfileEntries([profile1]);
 
       // Assert
-      expect(profileEntries.size).to.equal(2);
-      expect(profileEntries.has(defaultProfileEntry)).to.be.true;
-      expect(profileEntries.has(profileEntry)).to.be.true;
+      expect(profileEntries.size).toEqual(2);
+      expect(profileEntries.has(defaultProfileEntry)).toEqual(true);
+      expect(profileEntries.has(profileEntry)).toEqual(true);
     });
 
     it('resolves ProfileEntries when unknown profiles are provided', () => {
@@ -139,9 +137,9 @@ describe('./container/ProfileManager.js', () => {
       let profileEntries = profileManager.resolveProfileEntries([profile1, profile2]);
 
       // Assert
-      expect(profileEntries.size).to.equal(2);
-      expect(profileEntries.has(defaultProfileEntry)).to.be.true;
-      expect(profileEntries.has(profileEntry)).to.be.true;
+      expect(profileEntries.size).toEqual(2);
+      expect(profileEntries.has(defaultProfileEntry)).toEqual(true);
+      expect(profileEntries.has(profileEntry)).toEqual(true);
     });
 
   });

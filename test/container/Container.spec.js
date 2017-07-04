@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import Container from '../../lib/container/Container';
 
 describe('./container/Container.js', () => {

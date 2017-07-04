@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import FactoryContainerEntryResolver from '../../lib/factory/FactoryContainerEntryResolver';
 
 describe('./container/FactoryContainerEntryResolver.js', () => {
@@ -37,7 +35,7 @@ describe('./container/FactoryContainerEntryResolver.js', () => {
     let result = resolver.resolve(dependency);
 
     // Assert
-    expect(result.value).to.equal(dependency);
+    expect(result.value).toEqual(dependency);
   });
 
 });

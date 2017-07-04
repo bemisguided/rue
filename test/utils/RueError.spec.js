@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import RueError from '../../lib/utils/RueError';
 
 describe('./util/RueError.js', () => {
@@ -33,7 +31,7 @@ describe('./util/RueError.js', () => {
       let error = new RueError(message);
 
       // Assert
-      expect(error.message).to.equal(message);
+      expect(error.message).toEqual(message);
     });
 
     it('constructs a new RueError and creates a stack trace', () => {
@@ -41,8 +39,8 @@ describe('./util/RueError.js', () => {
       let error = new RueError('');
 
       // Assert
-      expect(error.stack).to.not.null;
-      expect(error.stack).to.not.undefined;
+      expect(error.stack).not.toBeNull();
+      expect(error.stack).not.toBeUndefined();
     });
 
     it('constructs a new RueError with a root error', () => {
@@ -57,7 +55,7 @@ describe('./util/RueError.js', () => {
       let error = new RueError(message, options);
 
       // Assert
-      expect(error.rootError).to.equal(rootError);
+      expect(error.rootError).toEqual(rootError);
     });
 
     it('constructs a new RueError with details', () => {
@@ -72,7 +70,7 @@ describe('./util/RueError.js', () => {
       let error = new RueError(message, options);
 
       // Assert
-      expect(error.details).to.equal(details);
+      expect(error.details).toEqual(details);
     });
 
   });

@@ -17,8 +17,6 @@
  *
  * @flow
  */
-import { beforeEach, describe, it } from 'mocha';
-import { expect } from 'chai';
 import DynamicProxy from '../../lib/utils/DynamicProxy';
 
 describe('./util/DynamicProxy.js', () => {
@@ -37,7 +35,7 @@ describe('./util/DynamicProxy.js', () => {
       let result = proxy.test(expected);
 
       // Assert
-      expect(result).to.equal(expected);
+      expect(result).toEqual(expected);
     });
 
     it('can proxy an Object getting a property', () => {
@@ -52,7 +50,7 @@ describe('./util/DynamicProxy.js', () => {
       let result = proxy.test;
 
       // Assert
-      expect(result).to.equal(expected);
+      expect(result).toEqual(expected);
     });
 
     it('can proxy an Object setting a property', () => {
@@ -67,7 +65,7 @@ describe('./util/DynamicProxy.js', () => {
       proxy.test = expected;
 
       // Assert
-      expect(proxy.test).to.equal(expected);
+      expect(proxy.test).toEqual(expected);
     });
 
     it('can proxy a Function passing through it\'s arguments', () => {
@@ -79,7 +77,7 @@ describe('./util/DynamicProxy.js', () => {
       let proxy = DynamicProxy.proxy(target);
 
       // Assert
-      expect(proxy(expected)).to.equal(expected);
+      expect(proxy(expected)).toEqual(expected);
     });
 
   });
@@ -98,11 +96,11 @@ describe('./util/DynamicProxy.js', () => {
       let proxy = DynamicProxy.proxy(target1);
 
       // Execute
-      expect(proxy.test).to.not.equal(expected);
+      expect(proxy.test).not.toEqual(expected);
       proxy._$setProxyTarget(target2);
 
       // Assert
-      expect(proxy.test).to.equal(expected);
+      expect(proxy.test).toEqual(expected);
 
     });
 
@@ -114,11 +112,11 @@ describe('./util/DynamicProxy.js', () => {
       let proxy = DynamicProxy.proxy(target1);
 
       // Execute
-      expect(proxy(expected)).to.not.equal(expected);
+      expect(proxy(expected)).not.toEqual(expected);
       proxy._$setProxyTarget(target2);
 
       // Assert
-      expect(proxy(expected)).to.equal(expected);
+      expect(proxy(expected)).toEqual(expected);
 
     });
 
