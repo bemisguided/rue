@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf dist/ && rm -fr coverage",
     "flow": "flow",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "npm run clean && babel ./lib --out-dir dist/ --copy-files",
     "test": "npm run flow && jest test/**/**.spec.js --coverage",
     "test-watch": "npm run flow && jest test/**/**.spec.js --watch",
