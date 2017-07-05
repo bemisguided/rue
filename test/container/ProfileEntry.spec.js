@@ -18,10 +18,10 @@
  * @flow
  */
 import ProfileEntry from '../../lib/container/ProfileEntry';
-import ContainerEntry from '../../lib/container/ContainerEntry';
-import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
+import InjectableEntry from '../../lib/container/InjectableEntry';
+import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
 
-describe('./container/ProfileEntry.js', () => {
+describe('./injectableManager/ProfileEntry.js', () => {
 
   let profileEntry: ProfileEntry;
 
@@ -29,78 +29,78 @@ describe('./container/ProfileEntry.js', () => {
     profileEntry = new ProfileEntry('test');
   });
 
-  describe('addContainerEntry()', () => {
+  describe('addInjectableEntry()', () => {
 
-    it('adds a ContainerEntry to the hash of content entries', () => {
+    it('adds a InjectableEntry to the hash of content entries', () => {
       // Setup
       let name = 'name';
-      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''), true);
+      let injectableEntry1 = new InjectableEntry(name, new InjectableResolver(''), true);
 
       // Execute
-      profileEntry.addContainerEntry(containerEntry1);
+      profileEntry.addInjectableEntry(injectableEntry1);
 
       // Assert
-      let containerEntry2 = profileEntry.containerEntries[name];
-      expect(containerEntry2).toEqual(containerEntry1);
+      let injectableEntry2 = profileEntry.injectableEntries[name];
+      expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
   });
 
-  describe('getContainerEntry()', () => {
+  describe('getInjectableEntry()', () => {
 
-    it('returns a ContainerEntry by a provided name from the hash of content entries', () => {
+    it('returns a InjectableEntry by a provided name from the hash of content entries', () => {
       // Setup
       let name = 'name';
-      let containerEntry1 = new ContainerEntry(name, new ContainerEntryResolver(''), true);
-      profileEntry.containerEntries[name] = containerEntry1;
+      let injectableEntry1 = new InjectableEntry(name, new InjectableResolver(''), true);
+      profileEntry.injectableEntries[name] = injectableEntry1;
 
       // Execute
-      let containerEntry2 = profileEntry.getContainerEntry(name);
+      let injectableEntry2 = profileEntry.getInjectableEntry(name);
 
       // Assert
-      expect(containerEntry2).toEqual(containerEntry1);
+      expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
   });
 
-  describe('getContainerEntries()', () => {
+  describe('getInjectableEntries()', () => {
 
-    it('returns an array of ContainerEntry from the hash of content entries', () => {
+    it('returns an array of InjectableEntry from the hash of content entries', () => {
       // Setup
       let name1 = 'name1';
       let name2 = 'name2';
-      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''), true);
-      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''), true);
-      profileEntry.containerEntries[name1] = containerEntry1;
-      profileEntry.containerEntries[name2] = containerEntry2;
+      let injectableEntry1 = new InjectableEntry(name1, new InjectableResolver(''), true);
+      let injectableEntry2 = new InjectableEntry(name2, new InjectableResolver(''), true);
+      profileEntry.injectableEntries[name1] = injectableEntry1;
+      profileEntry.injectableEntries[name2] = injectableEntry2;
 
       // Execute
-      let containerEntries = profileEntry.getContainerEntries();
+      let injectableEntries = profileEntry.getContainerEntries();
 
       // Assert
-      expect(containerEntries.indexOf(containerEntry1)).toBeGreaterThan(-1);
-      expect(containerEntries.indexOf(containerEntry2)).toBeGreaterThan(-1);
+      expect(injectableEntries.indexOf(injectableEntry1)).toBeGreaterThan(-1);
+      expect(injectableEntries.indexOf(injectableEntry2)).toBeGreaterThan(-1);
     });
 
   });
 
   describe('getContainerNames()', () => {
 
-    it('returns an array of ContainerEntry names from the hash of content entries', () => {
+    it('returns an array of InjectableEntry names from the hash of content entries', () => {
       // Setup
       let name1 = 'name1';
       let name2 = 'name2';
-      let containerEntry1 = new ContainerEntry(name1, new ContainerEntryResolver(''), true);
-      let containerEntry2 = new ContainerEntry(name2, new ContainerEntryResolver(''), true);
-      profileEntry.containerEntries[name1] = containerEntry1;
-      profileEntry.containerEntries[name2] = containerEntry2;
+      let injectableEntry1 = new InjectableEntry(name1, new InjectableResolver(''), true);
+      let injectableEntry2 = new InjectableEntry(name2, new InjectableResolver(''), true);
+      profileEntry.injectableEntries[name1] = injectableEntry1;
+      profileEntry.injectableEntries[name2] = injectableEntry2;
 
       // Execute
-      let containerEntries = profileEntry.getContainerNames();
+      let injectableEntries = profileEntry.getContainerNames();
 
       // Assert
-      expect(containerEntries.indexOf(name1)).toBeGreaterThan(-1);
-      expect(containerEntries.indexOf(name2)).toBeGreaterThan(-1);
+      expect(injectableEntries.indexOf(name1)).toBeGreaterThan(-1);
+      expect(injectableEntries.indexOf(name2)).toBeGreaterThan(-1);
     });
 
   });

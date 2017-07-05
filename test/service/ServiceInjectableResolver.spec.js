@@ -17,19 +17,27 @@
  *
  * @flow
  */
-import Builder from '../container/builder/Builder';
-import Container from '../container/Container';
-import FactoryInjectableResolver from './FactoryInjectableResolver';
+import ServiceInjectableResolver from '../../lib/service/ServiceInjectableResolver';
 
-export default class FactoryBuilder extends Builder {
+describe('./injectableManager/ServiceInjectableResolver.js', () => {
 
-  constructor(container: Container, name: string) {
-    super(container, name);
-  }
+  it('resolves a service class by forwarding dependencies to a constructor', () => {
+    // Setup
+    let dependency = 'hello';
+    class Service {
+      value: any;
 
-  module(fn: Function): Builder {
-    this.resolver = new FactoryInjectableResolver(fn);
-    return this;
-  }
+      constructor(value: any) {
+        this.value = value;
+      }
+    }
 
-}
+    // Execute
+    let resolver = new ServiceInjectableResolver(Service);
+    let result = resolver.resolve(dependency);
+
+    // Assert
+    expect(result.value).toEqual(dependency);
+  });
+
+});

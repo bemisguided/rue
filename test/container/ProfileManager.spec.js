@@ -20,7 +20,7 @@
 import ProfileManager from '../../lib/container/ProfileManager';
 import ProfileEntry from '../../lib/container/ProfileEntry';
 
-describe('./container/ProfileManager.js', () => {
+describe('./injectableManager/ProfileManager.js', () => {
 
   let profileManager: ProfileManager;
 

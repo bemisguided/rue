@@ -18,17 +18,17 @@
  * @flow
  */
 import DependencyTraverser from '../../lib/container/DependencyTraverser';
-import ContainerEntry from '../../lib/container/ContainerEntry';
-import ContainerEntryResolver from '../../lib/container/ContainerEntryResolver';
+import InjectableEntry from '../../lib/container/InjectableEntry';
+import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
 
-describe('./container/DependencyTraverser.js', () => {
+describe('./injectableManager/DependencyTraverser.js', () => {
 
-  let containerEntries: Map<string, ContainerEntry>;
+  let injectableEntries: Map<string, InjectableEntry>;
   let dependencyTraverser: DependencyTraverser;
 
   beforeEach(() => {
-    containerEntries = new Map();
-    dependencyTraverser = new DependencyTraverser(containerEntries);
+    injectableEntries = new Map();
+    dependencyTraverser = new DependencyTraverser(injectableEntries);
   });
 
   describe('traverse()', function () {
@@ -36,132 +36,132 @@ describe('./container/DependencyTraverser.js', () => {
     it('returns an ordered set of ContentEntries with no dependencies', () => {
       // Setup
       let name = 'test';
-      let resolver = new ContainerEntryResolver('resolver');
+      let resolver = new InjectableResolver('resolver');
       let dependencies = [];
-      let containerEntry = new ContainerEntry(name, resolver, true, dependencies);
-      containerEntries.set(name, containerEntry);
+      let injectableEntry = new InjectableEntry(name, resolver, true, dependencies);
+      injectableEntries.set(name, injectableEntry);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).toEqual(containerEntry);
+      expect(iterator.next().value).toEqual(injectableEntry);
     });
 
     it('returns an ordered set of ContentEntries with a single dependency', () => {
       // Setup
       let name1 = 'test1';
-      let resolver1 = new ContainerEntryResolver('resolver');
+      let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
-      let resolver2 = new ContainerEntryResolver('resolver');
-      let containerEntry1 = new ContainerEntry(name1, resolver1, true, [name2]);
-      let containerEntry2 = new ContainerEntry(name2, resolver2, true, []);
-      containerEntries.set(name1, containerEntry1);
-      containerEntries.set(name2, containerEntry2);
+      let resolver2 = new InjectableResolver('resolver');
+      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2]);
+      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, []);
+      injectableEntries.set(name1, injectableEntry1);
+      injectableEntries.set(name2, injectableEntry2);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).toEqual(containerEntry2);
-      expect(iterator.next().value).toEqual(containerEntry1);
+      expect(iterator.next().value).toEqual(injectableEntry2);
+      expect(iterator.next().value).toEqual(injectableEntry1);
     });
 
 
     it('returns an ordered set of ContentEntries with multiple dependencies', () => {
       // Setup
       let name1 = 'test1';
-      let resolver1 = new ContainerEntryResolver('resolver');
+      let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
-      let resolver2 = new ContainerEntryResolver('resolver');
+      let resolver2 = new InjectableResolver('resolver');
       let name3 = 'test3';
-      let resolver3 = new ContainerEntryResolver('resolver');
-      let containerEntry1 = new ContainerEntry(name1, resolver1, true, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, resolver2, true, []);
-      let containerEntry3 = new ContainerEntry(name3, resolver3, true, []);
-      containerEntries.set(name1, containerEntry1);
-      containerEntries.set(name2, containerEntry2);
-      containerEntries.set(name3, containerEntry3);
+      let resolver3 = new InjectableResolver('resolver');
+      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
+      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, []);
+      let injectableEntry3 = new InjectableEntry(name3, resolver3, true, []);
+      injectableEntries.set(name1, injectableEntry1);
+      injectableEntries.set(name2, injectableEntry2);
+      injectableEntries.set(name3, injectableEntry3);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).toEqual(containerEntry2);
-      expect(iterator.next().value).toEqual(containerEntry3);
-      expect(iterator.next().value).toEqual(containerEntry1);
+      expect(iterator.next().value).toEqual(injectableEntry2);
+      expect(iterator.next().value).toEqual(injectableEntry3);
+      expect(iterator.next().value).toEqual(injectableEntry1);
     });
 
     it('returns an ordered set of ContentEntries with multiple dependencies with dependencies', () => {
       // Setup
       let name1 = 'test1';
-      let resolver1 = new ContainerEntryResolver('resolver');
+      let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
-      let resolver2 = new ContainerEntryResolver('resolver');
+      let resolver2 = new InjectableResolver('resolver');
       let name3 = 'test3';
-      let resolver3 = new ContainerEntryResolver('resolver');
-      let containerEntry1 = new ContainerEntry(name1, resolver1, true, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, resolver2, true, [name3]);
-      let containerEntry3 = new ContainerEntry(name3, resolver3, true, []);
-      containerEntries.set(name1, containerEntry1);
-      containerEntries.set(name2, containerEntry2);
-      containerEntries.set(name3, containerEntry3);
+      let resolver3 = new InjectableResolver('resolver');
+      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
+      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, [name3]);
+      let injectableEntry3 = new InjectableEntry(name3, resolver3, true, []);
+      injectableEntries.set(name1, injectableEntry1);
+      injectableEntries.set(name2, injectableEntry2);
+      injectableEntries.set(name3, injectableEntry3);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).toEqual(containerEntry3);
-      expect(iterator.next().value).toEqual(containerEntry2);
-      expect(iterator.next().value).toEqual(containerEntry1);
+      expect(iterator.next().value).toEqual(injectableEntry3);
+      expect(iterator.next().value).toEqual(injectableEntry2);
+      expect(iterator.next().value).toEqual(injectableEntry1);
     });
 
 
     it('returns an ordered set of ContentEntries with separate dependency graphs', () => {
       // Setup
       let name1 = 'test1';
-      let resolver1 = new ContainerEntryResolver('resolver');
+      let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
-      let resolver2 = new ContainerEntryResolver('resolver');
+      let resolver2 = new InjectableResolver('resolver');
       let name3 = 'test3';
-      let resolver3 = new ContainerEntryResolver('resolver');
+      let resolver3 = new InjectableResolver('resolver');
       let name4 = 'test4';
-      let resolver4 = new ContainerEntryResolver('resolver');
-      let containerEntry1 = new ContainerEntry(name1, resolver1, true, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, resolver2, true, []);
-      let containerEntry3 = new ContainerEntry(name3, resolver3, true, []);
-      let containerEntry4 = new ContainerEntry(name4, resolver4, true, [name3]);
-      containerEntries.set(name1, containerEntry1);
-      containerEntries.set(name2, containerEntry2);
-      containerEntries.set(name3, containerEntry3);
-      containerEntries.set(name4, containerEntry4);
+      let resolver4 = new InjectableResolver('resolver');
+      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
+      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, []);
+      let injectableEntry3 = new InjectableEntry(name3, resolver3, true, []);
+      let injectableEntry4 = new InjectableEntry(name4, resolver4, true, [name3]);
+      injectableEntries.set(name1, injectableEntry1);
+      injectableEntries.set(name2, injectableEntry2);
+      injectableEntries.set(name3, injectableEntry3);
+      injectableEntries.set(name4, injectableEntry4);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
 
       // Assert
       let iterator = dependencyEntities.values();
-      expect(iterator.next().value).toEqual(containerEntry2);
-      expect(iterator.next().value).toEqual(containerEntry3);
-      expect(iterator.next().value).toEqual(containerEntry1);
-      expect(iterator.next().value).toEqual(containerEntry4);
+      expect(iterator.next().value).toEqual(injectableEntry2);
+      expect(iterator.next().value).toEqual(injectableEntry3);
+      expect(iterator.next().value).toEqual(injectableEntry1);
+      expect(iterator.next().value).toEqual(injectableEntry4);
     });
 
     it('throws error when a dependency cannot be resolved', () => {
       // Setup
       let name1 = 'test1';
-      let resolver1 = new ContainerEntryResolver('resolver');
+      let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
-      let resolver2 = new ContainerEntryResolver('resolver');
+      let resolver2 = new InjectableResolver('resolver');
       let name3 = 'test3';
-      let containerEntry1 = new ContainerEntry(name1, resolver1, true, [name2, name3]);
-      let containerEntry2 = new ContainerEntry(name2, resolver2, true, [name3]);
-      containerEntries.set(name1, containerEntry1);
-      containerEntries.set(name2, containerEntry2);
+      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
+      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, [name3]);
+      injectableEntries.set(name1, injectableEntry1);
+      injectableEntries.set(name2, injectableEntry2);
 
       // Assert
       try {
@@ -175,13 +175,13 @@ describe('./container/DependencyTraverser.js', () => {
     it('throws error when there is a circular dependency', function () {
       // Setup
       let name1 = 'test1';
-      let resolver1 = new ContainerEntryResolver('resolver');
+      let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
-      let resolver2 = new ContainerEntryResolver('resolver');
-      let containerEntry1 = new ContainerEntry(name1, resolver1, true, [name2]);
-      let containerEntry2 = new ContainerEntry(name2, resolver2, true, [name1]);
-      containerEntries.set(name1, containerEntry1);
-      containerEntries.set(name2, containerEntry2);
+      let resolver2 = new InjectableResolver('resolver');
+      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2]);
+      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, [name1]);
+      injectableEntries.set(name1, injectableEntry1);
+      injectableEntries.set(name2, injectableEntry2);
 
       // Assert
       try {

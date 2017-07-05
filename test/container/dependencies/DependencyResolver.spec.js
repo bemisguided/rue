@@ -17,19 +17,25 @@
  *
  * @flow
  */
-import Builder from '../container/builder/Builder';
-import Container from '../container/Container';
-import FactoryInjectableResolver from './FactoryInjectableResolver';
+import DependencyContext from '../../../lib/container/dependencies/DependencyContext';
+import DependencyResolver from '../../../lib/container/dependencies/DependencyResolver';
 
-export default class FactoryBuilder extends Builder {
+describe('./injectableManager/dependencies/DependencyResolver.js', () => {
 
-  constructor(container: Container, name: string) {
-    super(container, name);
-  }
+  describe('resolve()', () => {
 
-  module(fn: Function): Builder {
-    this.resolver = new FactoryInjectableResolver(fn);
-    return this;
-  }
+    it('always returns null', () => {
+      // Setup
+      let context = new DependencyContext();
+      let resolver = new DependencyResolver();
 
-}
+      // Execute
+      let injectable = resolver.resolve(context);
+
+      // Assert
+      expect(injectable).toBeNull();
+    });
+
+  });
+
+});
