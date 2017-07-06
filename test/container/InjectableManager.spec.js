@@ -40,8 +40,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies);
 
       // Assert
-      let profileEntry = injectableManager.profileManager.getDefaultProfileEntry();
-      let injectableEntry2 = profileEntry.injectableEntries[name];
+      let injectableEntry2 = injectableManager.injectableEntries[0];
       expect(injectableEntry2).not.toBeUndefined();
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
@@ -62,8 +61,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies, singleton);
 
       // Assert
-      let profileEntry = injectableManager.profileManager.getDefaultProfileEntry();
-      let injectableEntry2 = profileEntry.injectableEntries[name];
+      let injectableEntry2 = injectableManager.injectableEntries[0];
       expect(injectableEntry2).not.toBeUndefined();
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
@@ -84,17 +82,17 @@ describe('./injectableManager/InjectableManager.js', () => {
       let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies);
 
       // Assert
-      let profileEntry = injectableManager.profileManager.getDefaultProfileEntry();
-      let injectableEntry2 = profileEntry.injectableEntries[name];
+      let injectableEntry2 = injectableManager.injectableEntries[0];
       expect(injectableEntry2).not.toBeUndefined();
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
       expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.profiles).toEqual(['']);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
-    it('creates and adds a InjectableEntry multiple profiles when multiple profiles are provided', () => {
+    it('creates and adds a InjectableEntry to multiple profiles when multiple profiles are provided', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
@@ -108,23 +106,15 @@ describe('./injectableManager/InjectableManager.js', () => {
       let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies, singleton, profiles);
 
       // Assert
-      let profileEntry1 = injectableManager.profileManager.getProfileEntry(profile1);
-      let injectableEntry2 = profileEntry1.injectableEntries[name];
+      let injectableEntry2 = injectableManager.injectableEntries[0];
       expect(injectableEntry2).not.toBeUndefined();
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
       expect(injectableEntry2.dependencies).toEqual(dependencies);
       expect(injectableEntry2.singleton).toEqual(singleton);
+      expect(injectableEntry2.profiles).toEqual(profiles);
       expect(injectableEntry2).toEqual(injectableEntry1);
-
-      let profileEntry2 = injectableManager.profileManager.getProfileEntry(profile2);
-      let injectableEntry3 = profileEntry2.injectableEntries[name];
-      expect(injectableEntry3).not.toBeUndefined();
-      expect(injectableEntry3).not.toBeNull();
-      expect(injectableEntry3.name).toEqual(name);
-      expect(injectableEntry3.resolver).toEqual(resolver);
-      expect(injectableEntry3.dependencies).toEqual(dependencies);
     });
 
   });
@@ -268,7 +258,7 @@ describe('./injectableManager/InjectableManager.js', () => {
         injectableManager.getInjectableEntry(name, profiles);
       }
       catch (e) {
-        expect(e.message).toEqual('Duplicate dependencies found: name=test');
+        expect(e.message).toEqual('Duplicate injectable found in active profile scope: name=test');
       }
     });
 

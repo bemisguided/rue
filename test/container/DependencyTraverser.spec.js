@@ -20,15 +20,20 @@
 import DependencyTraverser from '../../lib/container/DependencyTraverser';
 import InjectableEntry from '../../lib/container/InjectableEntry';
 import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
+import InjectableManager from '../../lib/container/InjectableManager';
+import StandardDependencyResolver from '../../lib/container/dependencies/StandardDependencyResolver';
 
 describe('./injectableManager/DependencyTraverser.js', () => {
 
-  let injectableEntries: Map<string, InjectableEntry>;
+  let injectableManager: InjectableManager;
   let dependencyTraverser: DependencyTraverser;
 
   beforeEach(() => {
-    injectableEntries = new Map();
-    dependencyTraverser = new DependencyTraverser(injectableEntries);
+    injectableManager = new InjectableManager();
+    dependencyTraverser = new DependencyTraverser();
+    dependencyTraverser.injectableManager = injectableManager;
+    dependencyTraverser.activeProfiles = [];
+    dependencyTraverser.dependencyResolvers = [new StandardDependencyResolver()];
   });
 
   describe('traverse()', function () {
@@ -38,8 +43,10 @@ describe('./injectableManager/DependencyTraverser.js', () => {
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
       let dependencies = [];
-      let injectableEntry = new InjectableEntry(name, resolver, true, dependencies);
-      injectableEntries.set(name, injectableEntry);
+      let injectableEntry = new InjectableEntry(name, resolver);
+      injectableEntry.dependencies = dependencies;
+      injectableEntry.profiles = [''];
+      injectableManager.injectableEntries.push(injectableEntry);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
@@ -55,10 +62,14 @@ describe('./injectableManager/DependencyTraverser.js', () => {
       let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
       let resolver2 = new InjectableResolver('resolver');
-      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2]);
-      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, []);
-      injectableEntries.set(name1, injectableEntry1);
-      injectableEntries.set(name2, injectableEntry2);
+      let injectableEntry1 = new InjectableEntry(name1, resolver1);
+      injectableEntry1.dependencies = [name2];
+      injectableEntry1.profiles = [''];
+      let injectableEntry2 = new InjectableEntry(name2, resolver2);
+      injectableEntry2.dependencies = [];
+      injectableEntry2.profiles = [''];
+      injectableManager.injectableEntries.push(injectableEntry1);
+      injectableManager.injectableEntries.push(injectableEntry2);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
@@ -78,12 +89,18 @@ describe('./injectableManager/DependencyTraverser.js', () => {
       let resolver2 = new InjectableResolver('resolver');
       let name3 = 'test3';
       let resolver3 = new InjectableResolver('resolver');
-      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
-      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, []);
-      let injectableEntry3 = new InjectableEntry(name3, resolver3, true, []);
-      injectableEntries.set(name1, injectableEntry1);
-      injectableEntries.set(name2, injectableEntry2);
-      injectableEntries.set(name3, injectableEntry3);
+      let injectableEntry1 = new InjectableEntry(name1, resolver1);
+      injectableEntry1.dependencies = [name2, name3];
+      injectableEntry1.profiles = [''];
+      let injectableEntry2 = new InjectableEntry(name2, resolver2);
+      injectableEntry2.dependencies = [];
+      injectableEntry2.profiles = [''];
+      let injectableEntry3 = new InjectableEntry(name3, resolver3);
+      injectableEntry3.dependencies = [];
+      injectableEntry3.profiles = [''];
+      injectableManager.injectableEntries.push(injectableEntry1);
+      injectableManager.injectableEntries.push(injectableEntry2);
+      injectableManager.injectableEntries.push(injectableEntry3);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
@@ -103,12 +120,18 @@ describe('./injectableManager/DependencyTraverser.js', () => {
       let resolver2 = new InjectableResolver('resolver');
       let name3 = 'test3';
       let resolver3 = new InjectableResolver('resolver');
-      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
-      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, [name3]);
-      let injectableEntry3 = new InjectableEntry(name3, resolver3, true, []);
-      injectableEntries.set(name1, injectableEntry1);
-      injectableEntries.set(name2, injectableEntry2);
-      injectableEntries.set(name3, injectableEntry3);
+      let injectableEntry1 = new InjectableEntry(name1, resolver1);
+      injectableEntry1.dependencies = [name2, name3];
+      injectableEntry1.profiles = [''];
+      let injectableEntry2 = new InjectableEntry(name2, resolver2);
+      injectableEntry2.dependencies = [name3];
+      injectableEntry2.profiles = [''];
+      let injectableEntry3 = new InjectableEntry(name3, resolver3);
+      injectableEntry3.dependencies = [];
+      injectableEntry3.profiles = [''];
+      injectableManager.injectableEntries.push(injectableEntry1);
+      injectableManager.injectableEntries.push(injectableEntry2);
+      injectableManager.injectableEntries.push(injectableEntry3);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
@@ -131,14 +154,22 @@ describe('./injectableManager/DependencyTraverser.js', () => {
       let resolver3 = new InjectableResolver('resolver');
       let name4 = 'test4';
       let resolver4 = new InjectableResolver('resolver');
-      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
-      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, []);
-      let injectableEntry3 = new InjectableEntry(name3, resolver3, true, []);
-      let injectableEntry4 = new InjectableEntry(name4, resolver4, true, [name3]);
-      injectableEntries.set(name1, injectableEntry1);
-      injectableEntries.set(name2, injectableEntry2);
-      injectableEntries.set(name3, injectableEntry3);
-      injectableEntries.set(name4, injectableEntry4);
+      let injectableEntry1 = new InjectableEntry(name1, resolver1);
+      injectableEntry1.dependencies = [name2, name3];
+      injectableEntry1.profiles = [''];
+      let injectableEntry2 = new InjectableEntry(name2, resolver2);
+      injectableEntry2.dependencies = [];
+      injectableEntry2.profiles = [''];
+      let injectableEntry3 = new InjectableEntry(name3, resolver3);
+      injectableEntry3.dependencies = [];
+      injectableEntry3.profiles = [''];
+      let injectableEntry4 = new InjectableEntry(name4, resolver4);
+      injectableEntry4.dependencies = [name3];
+      injectableEntry4.profiles = [''];
+      injectableManager.injectableEntries.push(injectableEntry1);
+      injectableManager.injectableEntries.push(injectableEntry2);
+      injectableManager.injectableEntries.push(injectableEntry3);
+      injectableManager.injectableEntries.push(injectableEntry4);
 
       // Execute
       let dependencyEntities = dependencyTraverser.traverse();
@@ -158,10 +189,14 @@ describe('./injectableManager/DependencyTraverser.js', () => {
       let name2 = 'test2';
       let resolver2 = new InjectableResolver('resolver');
       let name3 = 'test3';
-      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2, name3]);
-      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, [name3]);
-      injectableEntries.set(name1, injectableEntry1);
-      injectableEntries.set(name2, injectableEntry2);
+      let injectableEntry1 = new InjectableEntry(name1, resolver1);
+      injectableEntry1.dependencies = [name2, name3];
+      injectableEntry1.profiles = [''];
+      let injectableEntry2 = new InjectableEntry(name2, resolver2);
+      injectableEntry2.dependencies = [name3];
+      injectableEntry2.profiles = [''];
+      injectableManager.injectableEntries.push(injectableEntry1);
+      injectableManager.injectableEntries.push(injectableEntry2);
 
       // Assert
       try {
@@ -178,10 +213,14 @@ describe('./injectableManager/DependencyTraverser.js', () => {
       let resolver1 = new InjectableResolver('resolver');
       let name2 = 'test2';
       let resolver2 = new InjectableResolver('resolver');
-      let injectableEntry1 = new InjectableEntry(name1, resolver1, true, [name2]);
-      let injectableEntry2 = new InjectableEntry(name2, resolver2, true, [name1]);
-      injectableEntries.set(name1, injectableEntry1);
-      injectableEntries.set(name2, injectableEntry2);
+      let injectableEntry1 = new InjectableEntry(name1, resolver1);
+      injectableEntry1.dependencies = [name2];
+      injectableEntry1.profiles = [''];
+      let injectableEntry2 = new InjectableEntry(name2, resolver2);
+      injectableEntry2.dependencies = [name1];
+      injectableEntry2.profiles = [''];
+      injectableManager.injectableEntries.push(injectableEntry1);
+      injectableManager.injectableEntries.push(injectableEntry2);
 
       // Assert
       try {
