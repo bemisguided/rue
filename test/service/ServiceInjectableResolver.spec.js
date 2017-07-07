@@ -34,10 +34,29 @@ describe('./injectableManager/ServiceInjectableResolver.js', () => {
 
     // Execute
     let resolver = new ServiceInjectableResolver(Service);
-    let result = resolver.resolve(dependency);
+    let promise = resolver.resolve('test', dependency);
 
     // Assert
-    expect(result.value).toEqual(dependency);
+    expect(promise).resolves.toEqual({ value: dependency });
+  });
+
+  it('handles errors on construction of a service class', () => {
+    // Setup
+    let dependency = 'hello';
+    class Service {
+      value: any;
+
+      constructor(value: any) {
+        throw { value: value };
+      }
+    }
+
+    // Execute
+    let resolver = new ServiceInjectableResolver(Service);
+    let promise = resolver.resolve('test', dependency);
+
+    // Assert
+    expect(promise).rejects.toEqual({ value: dependency });
   });
 
 });

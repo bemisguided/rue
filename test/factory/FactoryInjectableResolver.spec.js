@@ -21,21 +21,57 @@ import FactoryInjectableResolver from '../../lib/factory/FactoryInjectableResolv
 
 describe('./injectableManager/FactoryInjectableResolver.js', () => {
 
-  it('resolves a factory method by forwarding dependencies', () => {
+  it('resolves a factory method by forwarding dependencies when result is a Promise', () => {
+    // Setup
+    let dependency = 'hello';
+    let factory = (value) => {
+      return new Promise((resolve) => {
+        resolve({
+          value: value
+        });
+      });
+    };
+
+    // Execute
+    let resolver = new FactoryInjectableResolver(factory);
+    let promise = resolver.resolve('test', dependency);
+
+    // Assert
+    expect(promise).resolves.toEqual({ value: dependency });
+  });
+
+  it('resolves a factory method by forwarding dependencies when result is not a Promise', () => {
     // Setup
     let dependency = 'hello';
     let factory = (value) => {
       return {
-        value: value,
+        value: value
       };
     };
 
     // Execute
     let resolver = new FactoryInjectableResolver(factory);
-    let result = resolver.resolve(dependency);
+    let promise = resolver.resolve('test', dependency);
 
     // Assert
-    expect(result.value).toEqual(dependency);
+    expect(promise).resolves.toEqual({ value: dependency });
+  });
+
+  it('handles errors on execution of a factory method', () => {
+    // Setup
+    let dependency = 'hello';
+    let factory = (value) => {
+      throw {
+        value: value
+      };
+    };
+
+    // Execute
+    let resolver = new FactoryInjectableResolver(factory);
+    let promise = resolver.resolve('test', dependency);
+
+    // Assert
+    expect(promise).rejects.toEqual({ value: dependency });
   });
 
 });

@@ -34,11 +34,16 @@
     "flow-bin": "^0.48.0",
     "jest": "^20.0.4",
     "jscs": "^3.0.7",
+    "q": "^1.5.0",
     "rimraf": "^2.6.1"
   },
   "files": [
     "index.js",
     "dist"
   ],
-  "false": {}
+  "false": {},
+  "jest": {
+    "collectCoverageFrom": ["lib/**.{js}", "!**/node_modules/**"],
+    "coverageReporters": ["html"]
+  }
 }

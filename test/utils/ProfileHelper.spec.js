@@ -21,7 +21,7 @@ import ProfileHelper from '../../lib/utils/ProfileHelper';
 
 describe('./util/ProfileHelper.js', () => {
 
-  describe('filterProfiles()', () => {
+  describe('ProfileHelper.filterProfiles()', () => {
 
     it('filters array of profiles for a provided array of active profiles', () => {
       // Setup
@@ -73,7 +73,7 @@ describe('./util/ProfileHelper.js', () => {
 
   });
 
-  describe('hasProfile()', () => {
+  describe('ProfileHelper.hasProfile()', () => {
 
     it('matches a profile for a provided array of active profiles', () => {
       // Setup
@@ -101,7 +101,7 @@ describe('./util/ProfileHelper.js', () => {
 
   });
 
-  describe('hasProfileNot()', () => {
+  describe('ProfileHelper.hasProfileNot()', () => {
 
     it('returns false when a profile matches for a provided array of active profiles', () => {
       // Setup
@@ -129,7 +129,7 @@ describe('./util/ProfileHelper.js', () => {
 
   });
 
-  describe('normalizeActiveProfiles()', () => {
+  describe('ProfileHelper.normalizeActiveProfiles()', () => {
 
     it('normalizes the active profiles with a default only if no profiles provided', () => {
       // Setup
@@ -139,7 +139,7 @@ describe('./util/ProfileHelper.js', () => {
       let result = ProfileHelper.normalizeActiveProfiles();
 
       // Assert
-      expect(result).toEqual(['']);
+      expect(result).toEqual([ProfileHelper.PROFILE_DEFAULT]);
     });
 
     it('normalizes the active profiles with a default if no default provided', () => {
@@ -150,7 +150,7 @@ describe('./util/ProfileHelper.js', () => {
       let result = ProfileHelper.normalizeActiveProfiles([profile1]);
 
       // Assert
-      expect(result).toEqual([profile1, '']);
+      expect(result).toEqual([profile1, ProfileHelper.PROFILE_DEFAULT]);
     });
 
     it('normalizes the active profiles without adding a default if default already provided', () => {
@@ -158,14 +158,14 @@ describe('./util/ProfileHelper.js', () => {
       let profile1 = 'profile1';
 
       // Execute
-      let result = ProfileHelper.normalizeActiveProfiles([profile1, '']);
+      let result = ProfileHelper.normalizeActiveProfiles([profile1, ProfileHelper.PROFILE_DEFAULT]);
 
       // Assert
-      expect(result).toEqual([profile1, '']);
+      expect(result).toEqual([profile1, ProfileHelper.PROFILE_DEFAULT]);
     });
 
   });
-  describe('normalizeProfiles()', () => {
+  describe('ProfileHelper.normalizeProfiles()', () => {
 
     it('normalizes the profiles with a default only if no profiles provided', () => {
       // Setup
@@ -175,7 +175,7 @@ describe('./util/ProfileHelper.js', () => {
       let result = ProfileHelper.normalizeProfiles();
 
       // Assert
-      expect(result).toEqual(['']);
+      expect(result).toEqual([ProfileHelper.PROFILE_DEFAULT]);
     });
 
     it('normalizes the profiles without a default', () => {

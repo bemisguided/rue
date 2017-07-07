@@ -17,11 +17,11 @@
  *
  * @flow
  */
-import DependencyTraverser from '../../lib/container/DependencyTraverser';
-import InjectableEntry from '../../lib/container/InjectableEntry';
-import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
-import InjectableManager from '../../lib/container/InjectableManager';
-import StandardDependencyResolver from '../../lib/container/dependencies/StandardDependencyResolver';
+import DependencyTraverser from '../../../lib/container/dependencies/DependencyTraverser';
+import StandardDependencyResolver from '../../../lib/container/dependencies/StandardDependencyResolver';
+import InjectableEntry from '../../../lib/container/injectables/InjectableEntry';
+import InjectableResolver from '../../../lib/container/injectables/InjectableResolver';
+import InjectableManager from '../../../lib/container/injectables/InjectableManager';
 
 describe('./injectableManager/DependencyTraverser.js', () => {
 
