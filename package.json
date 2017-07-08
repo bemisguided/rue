@@ -4,8 +4,16 @@
   "description": "nodejs dependency injection container",
   "main": "index.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=6.11.0"
   },
+  "keywords": [
+    "rue",
+    "rue framework",
+    "ioc",
+    "inversion of control",
+    "di",
+    "dependency injection"
+  ],
   "scripts": {
     "clean": "rimraf dist/ && rm -fr coverage",
     "flow": "flow",
@@ -43,7 +51,12 @@
   ],
   "false": {},
   "jest": {
-    "collectCoverageFrom": ["lib/**.{js}", "!**/node_modules/**"],
-    "coverageReporters": ["html"]
+    "collectCoverageFrom": [
+      "lib/**.{js}",
+      "!**/node_modules/**"
+    ],
+    "coverageReporters": [
+      "html"
+    ]
   }
 }
