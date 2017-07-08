@@ -275,7 +275,7 @@ describe('./injectableManager/InjectableManager.js', () => {
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries();
-      expect(injectableEntries.get(name)).toEqual(injectableEntry);
+      expect(injectableEntries.has(injectableEntry)).toBeTruthy();
     });
 
     it('returns a Map of ContainerEntries from the default profile a profile is provided', () => {
@@ -287,7 +287,7 @@ describe('./injectableManager/InjectableManager.js', () => {
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries(['profile']);
-      expect(injectableEntries.get(name)).toEqual(injectableEntry);
+      expect(injectableEntries.has(injectableEntry)).toBeTruthy();
     });
 
     it('returns a Map of ContainerEntries with a InjectableEntry from a of provided profiles', () => {
@@ -306,9 +306,9 @@ describe('./injectableManager/InjectableManager.js', () => {
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries([profile1]);
-      expect(injectableEntries.get(name1)).toEqual(injectableEntry1);
-      expect(injectableEntries.get(name2)).toEqual(injectableEntry2);
-      expect(injectableEntries.has(name2)).not.toEqual(injectableEntry3);
+      expect(injectableEntries.has(injectableEntry1)).toBeTruthy();
+      expect(injectableEntries.has(injectableEntry2)).toBeTruthy();
+      expect(injectableEntries.has(injectableEntry3)).toBeFalsy();
     });
 
     it('returns a Map of ContainerEntries without a InjectableEntry when a profile is provided does not have it available', () => {
@@ -318,11 +318,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       let dependencies = ['dependencies'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
-      injectableManager.addInjectableEntry(name, resolver, dependencies, true, [profile1]);
+      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencies, true, [profile1]);
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries([profile2]);
-      expect(injectableEntries.has(name)).toEqual(false);
+      expect(injectableEntries.has(injectableEntry)).toBeFalsy();
     });
 
   });

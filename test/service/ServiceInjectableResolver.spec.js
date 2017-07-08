@@ -23,21 +23,24 @@ describe('./injectableManager/ServiceInjectableResolver.js', () => {
 
   it('resolves a service class by forwarding dependencies to a constructor', () => {
     // Setup
-    let dependency = 'hello';
+    let dependency1 = 'hello';
+    let dependency2 = 'world';
     class Service {
-      value: any;
+      value1: any;
+      value2: any;
 
-      constructor(value: any) {
-        this.value = value;
+      constructor(value1: any, value2: any) {
+        this.value1 = value1;
+        this.value2 = value2;
       }
     }
 
     // Execute
     let resolver = new ServiceInjectableResolver(Service);
-    let promise = resolver.resolve('test', dependency);
+    let promise = resolver.resolve('test', [dependency1, dependency2]);
 
     // Assert
-    expect(promise).resolves.toEqual({ value: dependency });
+    expect(promise).resolves.toEqual({ value1: dependency1, value2: dependency2 });
   });
 
   it('handles errors on construction of a service class', () => {
@@ -53,7 +56,7 @@ describe('./injectableManager/ServiceInjectableResolver.js', () => {
 
     // Execute
     let resolver = new ServiceInjectableResolver(Service);
-    let promise = resolver.resolve('test', dependency);
+    let promise = resolver.resolve('test', [dependency]);
 
     // Assert
     expect(promise).rejects.toEqual({ value: dependency });

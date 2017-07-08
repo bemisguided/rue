@@ -159,6 +159,22 @@ describe('./util/ProxyHelper.js', () => {
       expect(proxy(expected)).toEqual(expected);
     });
 
+    describe('$proxy._$isProxy()', () => {
+
+      it('correctly identifies itself as a Swapable Proxy', () => {
+        // Setup
+        let target = {
+          test: 'hello'
+        };
+        let proxy = ProxyHelper.swapableProxy(target);
+
+        // Execute
+        expect(proxy._$isProxy).toEqual(true);
+
+      });
+
+    });
+
     describe('$proxy._$swapTarget()', () => {
 
       it('can change an Object proxy target', () => {

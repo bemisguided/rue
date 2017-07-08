@@ -23,38 +23,42 @@ describe('./injectableManager/FactoryInjectableResolver.js', () => {
 
   it('resolves a factory method by forwarding dependencies when result is a Promise', () => {
     // Setup
-    let dependency = 'hello';
-    let factory = (value) => {
+    let dependency1 = 'hello';
+    let dependency2 = 'there';
+    let factory = (value1, value2) => {
       return new Promise((resolve) => {
         resolve({
-          value: value
+          value1: value1,
+          value2: value2
         });
       });
     };
 
     // Execute
     let resolver = new FactoryInjectableResolver(factory);
-    let promise = resolver.resolve('test', dependency);
+    let promise = resolver.resolve('test', [dependency1, dependency2]);
 
     // Assert
-    expect(promise).resolves.toEqual({ value: dependency });
+    expect(promise).resolves.toEqual({ value1: dependency1, value2: dependency2 });
   });
 
   it('resolves a factory method by forwarding dependencies when result is not a Promise', () => {
     // Setup
-    let dependency = 'hello';
-    let factory = (value) => {
+    let dependency1 = 'hello';
+    let dependency2 = 'there';
+    let factory = (value1, value2) => {
       return {
-        value: value
+        value1: value1,
+        value2: value2
       };
     };
 
     // Execute
     let resolver = new FactoryInjectableResolver(factory);
-    let promise = resolver.resolve('test', dependency);
+    let promise = resolver.resolve('test', [dependency1, dependency2]);
 
     // Assert
-    expect(promise).resolves.toEqual({ value: dependency });
+    expect(promise).resolves.toEqual({ value1: dependency1, value2: dependency2 });
   });
 
   it('handles errors on execution of a factory method', () => {
@@ -68,7 +72,7 @@ describe('./injectableManager/FactoryInjectableResolver.js', () => {
 
     // Execute
     let resolver = new FactoryInjectableResolver(factory);
-    let promise = resolver.resolve('test', dependency);
+    let promise = resolver.resolve('test', [dependency]);
 
     // Assert
     expect(promise).rejects.toEqual({ value: dependency });

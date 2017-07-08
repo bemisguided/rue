@@ -32,7 +32,7 @@ describe('./injectableManager/injectables/InjectableResolver.js', () => {
       let resolver = new InjectableResolver(expected);
 
       // Execute
-      let target = resolver.resolve('name1', 'name2', 'name3');
+      let target = resolver.resolve('name1', ['name2', 'name3']);
 
       // Assert
       expect(target).toEqual(expected);

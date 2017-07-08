@@ -61,7 +61,7 @@ describe('./injectableManager/dependencies/StandardDependencyResolver.js', () =>
       let profiles = [profile];
       container.register(name, new InjectableResolver(), [], profiles);
       context.name = name;
-      context.profiles = profiles;
+      context.activeProfiles = profiles;
       let resolver = new StandardDependencyResolver();
 
       // Execute
