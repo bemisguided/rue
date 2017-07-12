@@ -25,7 +25,7 @@ rue
   .factory('SomeApiService')
   .module(require('./api/SomeApiService'))
   .withProfiles('production')
-  .build();
+  .done();
 
 // Configures a test stub for the API service that is only in 
 // available in the `test` profile
@@ -34,7 +34,7 @@ rue
   .module(require('./api/StubSomeApiService'))
   .isSingleton(false)
   .withProfiles('test')
-  .build();
+  .done();
 
 // Configures a business service that is a pure class/construct pattern 
 // Object. The API service is injected as a dependency to the constructor. This
@@ -43,7 +43,7 @@ rue
   .service('SomeBusinessService')
   .module(require('./service/SomeBusinessService'))
   .withDependencies('SomeApiService')
-  .build();
+  .done();
 
 // Activate the application and then wait for the promise to complete
 rue

@@ -93,7 +93,7 @@ describe('./container/Builder.js', () => {
 
   });
 
-  describe('build()', () => {
+  describe('done()', () => {
 
     it('correctly sets the dependencies provided', () => {
       // Setup
@@ -112,7 +112,7 @@ describe('./container/Builder.js', () => {
         .isSingleton(singleton);
 
       builder.resolver = new InjectableResolver();
-      builder.build();
+      builder.done();
 
       // Assert
       let injectableEntry = container.injectableManager.injectableEntries[0];
@@ -140,7 +140,7 @@ describe('./container/Builder.js', () => {
 
       // Assert
       try {
-        builder.build();
+        builder.done();
       }
       catch (e) {
         expect(e.message).toEqual('No module specified: name=test');
