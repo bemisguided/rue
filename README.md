@@ -2,7 +2,7 @@
 [![node](https://img.shields.io/node/v/rue.svg)]()
 [![npm](https://img.shields.io/npm/l/rue.svg)]()
 [![Build Status](https://travis-ci.org/bemisguided/rue.svg)](https://travis-ci.org/bemisguided/rue)
-[![David](https://img.shields.io/david/bemisguided/rue)]()
+[![David](https://img.shields.io/david/bemisguided/rue.svg)]()
 
 **rue** a not (too) opinionated dependency injection container for nodejs.
 
