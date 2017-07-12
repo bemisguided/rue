@@ -1,5 +1,8 @@
 # rue
-[![Build Status](https://travis-ci.org/bemisguided/rue.svg?branch=rewrite-es6)](https://travis-ci.org/bemisguided/rue)
+[![node](https://img.shields.io/node/v/rue.svg)]()
+[![npm](https://img.shields.io/npm/l/rue.svg)]()
+[![Build Status](https://travis-ci.org/bemisguided/rue.svg)](https://travis-ci.org/bemisguided/rue)
+[![David](https://img.shields.io/david/bemisguided/rue)]()
 
 **rue** a not (too) opinionated dependency injection container for nodejs.
 
