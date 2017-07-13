@@ -1,5 +1,6 @@
 # rue
-[![node](https://img.shields.io/node/v/rue.svg)]()
+[![npm](https://img.shields.io/npm/v/rue.svg)]()
+[![state](https://img.shields.io/badge/state-alpha-yellow.svg)]()
 [![npm](https://img.shields.io/npm/l/rue.svg)]()
 [![Build Status](https://travis-ci.org/bemisguided/rue.svg)](https://travis-ci.org/bemisguided/rue)
 [![David](https://img.shields.io/david/bemisguided/rue.svg)]()
