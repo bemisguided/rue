@@ -1,6 +1,6 @@
 {
   "name": "rue",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "nodejs dependency injection container",
   "main": "index.js",
   "engines": {
