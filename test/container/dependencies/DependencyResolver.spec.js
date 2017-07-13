@@ -17,20 +17,25 @@
  *
  * @flow
  */
-import Container from './container/Container';
-import Builder from './container/Builder';
-import InjectableResolver from './container/injectables/InjectableResolver';
-import DependencyResolver from './container/dependencies/DependencyResolver';
-import FactoryBuilder from './factory/FactoryBuilder';
-import ServiceBuilder from './service/ServiceBuilder';
+import DependencyContext from '../../../lib/container/dependencies/DependencyContext';
+import DependencyResolver from '../../../lib/container/dependencies/DependencyResolver';
 
-module.exports = {
-  Container: Container,
-  factory: FactoryBuilder.create,
-  service: ServiceBuilder.create,
-  spi: {
-    Builder: Builder,
-    DependencyResolver: DependencyResolver,
-    InjectableResolver: InjectableResolver,
-  },
-};
+describe('./injectableManager/dependencies/DependencyResolver.js', () => {
+
+  describe('resolve()', () => {
+
+    it('always returns null', () => {
+      // Setup
+      let context = new DependencyContext();
+      let resolver = new DependencyResolver();
+
+      // Execute
+      let injectable = resolver.resolve(context);
+
+      // Assert
+      expect(injectable).toBeNull();
+    });
+
+  });
+
+});

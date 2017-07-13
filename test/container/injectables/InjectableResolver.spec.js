@@ -17,20 +17,27 @@
  *
  * @flow
  */
-import Container from './container/Container';
-import Builder from './container/Builder';
-import InjectableResolver from './container/injectables/InjectableResolver';
-import DependencyResolver from './container/dependencies/DependencyResolver';
-import FactoryBuilder from './factory/FactoryBuilder';
-import ServiceBuilder from './service/ServiceBuilder';
+import InjectableResolver from '../../../lib/container/injectables/InjectableResolver';
 
-module.exports = {
-  Container: Container,
-  factory: FactoryBuilder.create,
-  service: ServiceBuilder.create,
-  spi: {
-    Builder: Builder,
-    DependencyResolver: DependencyResolver,
-    InjectableResolver: InjectableResolver,
-  },
-};
+describe('./injectableManager/injectables/InjectableResolver.js', () => {
+
+  describe('resolve()', () => {
+
+    it('always returns the injectable without operation', () => {
+      // Setup
+      let expected = {
+        value: 'test',
+      };
+
+      let resolver = new InjectableResolver(expected);
+
+      // Execute
+      let target = resolver.resolve('name1', ['name2', 'name3']);
+
+      // Assert
+      expect(target).toEqual(expected);
+    });
+
+  });
+
+});
