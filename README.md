@@ -1,9 +1,10 @@
 # rue
-[![npm](https://img.shields.io/npm/v/rue.svg)]()
-[![state](https://img.shields.io/badge/state-alpha-yellow.svg)]()
-[![npm](https://img.shields.io/npm/l/rue.svg)]()
+[![npm](https://img.shields.io/npm/v/rue.svg)](https://www.npmjs.com/package/rue)
+[![state](https://img.shields.io/badge/state-alpha-yellow.svg)](https://github.com/bemisguided/rue)
+[![npm](https://img.shields.io/npm/l/rue.svg)](https://github.com/bemisguided/rue)
+[![node](https://img.shields.io/node/v/rue.svg)](https://github.com/bemisguided/rue)
+[![David](https://img.shields.io/david/bemisguided/rue.svg)](https://github.com/bemisguided/rue)
 [![Build Status](https://travis-ci.org/bemisguided/rue.svg)](https://travis-ci.org/bemisguided/rue)
-[![David](https://img.shields.io/david/bemisguided/rue.svg)]()
 
 **rue** a not (too) opinionated dependency injection container for nodejs.
 
