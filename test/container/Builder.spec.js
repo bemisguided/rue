@@ -87,7 +87,7 @@ describe('./container/Builder.js', () => {
       let result = builder.withProfiles(profile1, profile2);
 
       // Assert
-      expect(builder.profiles).toEqual(profiles);
+      expect(builder.profileNames).toEqual(profiles);
       expect(result).toEqual(builder);
     });
 
@@ -121,7 +121,7 @@ describe('./container/Builder.js', () => {
       expect(injectableEntry.name).toEqual(name);
       expect(injectableEntry.singleton).toEqual(singleton);
       expect(injectableEntry.dependencyNames).toEqual(dependencyNames);
-      expect(injectableEntry.profiles).toEqual(profiles);
+      expect(injectableEntry.profileNames).toEqual(profiles);
     });
 
     it('throws an error when no resolver provided', () => {

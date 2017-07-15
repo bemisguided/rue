@@ -2,7 +2,7 @@
   "name": "rue",
   "version": "0.8.1",
   "description": "nodejs dependency injection container",
-  "main": "dist/",
+  "main": "dist/rue.js",
   "engines": {
     "node": ">=6.11.1"
   },

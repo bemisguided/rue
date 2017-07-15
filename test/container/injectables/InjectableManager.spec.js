@@ -37,7 +37,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let dependencyNames = ['dependencyNames'];
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -58,7 +58,10 @@ describe('./injectableManager/InjectableManager.js', () => {
       let singleton = false;
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, singleton);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {
+        dependencyNames: dependencyNames,
+        singleton: singleton,
+      });
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -79,7 +82,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let singleton = true;
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -88,7 +91,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
       expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
-      expect(injectableEntry2.profiles).toEqual(['']);
+      expect(injectableEntry2.profileNames).toEqual(['']);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
@@ -103,7 +106,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       let profiles = [profile1, profile2];
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, singleton, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {
+        dependencyNames: dependencyNames,
+        singleton: singleton,
+        profileNames: profiles,
+      });
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -113,7 +120,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       expect(injectableEntry2.resolver).toEqual(resolver);
       expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2.singleton).toEqual(singleton);
-      expect(injectableEntry2.profiles).toEqual(profiles);
+      expect(injectableEntry2.profileNames).toEqual(profiles);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
@@ -126,7 +133,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name);
@@ -150,7 +157,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profiles = [profile1];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {
+        dependencyNames: dependencyNames,
+        singleton: true,
+        profileNames: profiles,
+      });
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, profiles);
@@ -174,7 +185,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profiles = [profile1];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, profiles);
@@ -199,7 +210,10 @@ describe('./injectableManager/InjectableManager.js', () => {
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {
+        dependencyNames: dependencyNames,
+        singleton: true, profileNames: profiles,
+      });
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, [profile2]);
@@ -224,7 +238,10 @@ describe('./injectableManager/InjectableManager.js', () => {
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {
+        dependencyNames: dependencyNames, singleton: true,
+        profileNames: profiles,
+      });
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, profiles);
@@ -250,8 +267,16 @@ describe('./injectableManager/InjectableManager.js', () => {
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      injectableManager.addInjectableEntry(name, resolver1, dependencyNames, true, [profile1]);
-      injectableManager.addInjectableEntry(name, resolver2, dependencyNames, true, [profile2]);
+      injectableManager.addInjectableEntry(name, resolver1, {
+        dependencyNames: dependencyNames,
+        singleton: true,
+        profileNames: [profile1],
+      });
+      injectableManager.addInjectableEntry(name, resolver2, {
+        dependencyNames: dependencyNames,
+        singleton: true,
+        profileNames: [profile2],
+      });
 
       // Assert
       try {
@@ -271,7 +296,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
-      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
+      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries();
@@ -283,7 +308,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
-      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
+      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries(['profile']);
@@ -300,9 +325,17 @@ describe('./injectableManager/InjectableManager.js', () => {
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
-      let injectableEntry1 = injectableManager.addInjectableEntry(name1, resolver1, dependencyNames);
-      let injectableEntry2 = injectableManager.addInjectableEntry(name2, resolver2, dependencyNames, true, [profile1]);
-      let injectableEntry3 = injectableManager.addInjectableEntry(name2, resolver3, dependencyNames, true, [profile2]);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name1, resolver1, {dependencyNames: dependencyNames});
+      let injectableEntry2 = injectableManager.addInjectableEntry(name2, resolver2, {
+        dependencyNames: dependencyNames,
+        singleton: true,
+        profileNames: [profile1],
+      });
+      let injectableEntry3 = injectableManager.addInjectableEntry(name2, resolver3, {
+        dependencyNames: dependencyNames,
+        singleton: true,
+        profileNames: [profile2],
+      });
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries([profile1]);
@@ -318,7 +351,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
-      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, [profile1]);
+      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, {
+        dependencyNames: dependencyNames,
+        singleton: true,
+        profileNames: [profile1],
+      });
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries([profile2]);
@@ -327,4 +364,5 @@ describe('./injectableManager/InjectableManager.js', () => {
 
   });
 
-});
+})
+;
