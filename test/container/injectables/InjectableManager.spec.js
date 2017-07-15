@@ -34,10 +34,10 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -45,7 +45,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2.singleton).toEqual(true);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
@@ -54,11 +54,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let singleton = false;
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies, singleton);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, singleton);
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -66,7 +66,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2.singleton).toEqual(singleton);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
@@ -75,11 +75,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let singleton = true;
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -87,7 +87,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2.profiles).toEqual(['']);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
@@ -96,14 +96,14 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let singleton = true;
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
 
       // Execute
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies, singleton, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, singleton, profiles);
 
       // Assert
       let injectableEntry2 = injectableManager.injectableEntries[0];
@@ -111,7 +111,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       expect(injectableEntry2).not.toBeNull();
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2.singleton).toEqual(singleton);
       expect(injectableEntry2.profiles).toEqual(profiles);
       expect(injectableEntry2).toEqual(injectableEntry1);
@@ -125,8 +125,8 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies);
+      let dependencyNames = ['dependencyNames'];
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name);
@@ -139,7 +139,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       }
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
@@ -147,10 +147,10 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profiles = [profile1];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies, true, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, profiles);
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, profiles);
@@ -163,7 +163,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       }
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
@@ -171,10 +171,10 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profiles = [profile1];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, profiles);
@@ -187,7 +187,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       }
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
@@ -195,11 +195,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies, true, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, profiles);
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, [profile2]);
@@ -212,7 +212,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       }
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
@@ -220,11 +220,11 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencies, true, profiles);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, profiles);
 
       // Execute
       let injectableEntry2 = injectableManager.getInjectableEntry(name, profiles);
@@ -237,7 +237,7 @@ describe('./injectableManager/InjectableManager.js', () => {
       }
       expect(injectableEntry2.name).toEqual(name);
       expect(injectableEntry2.resolver).toEqual(resolver);
-      expect(injectableEntry2.dependencies).toEqual(dependencies);
+      expect(injectableEntry2.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry2).toEqual(injectableEntry1);
     });
 
@@ -246,12 +246,12 @@ describe('./injectableManager/InjectableManager.js', () => {
       let name = 'test';
       let resolver1 = new InjectableResolver('resolver');
       let resolver2 = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
       let profiles = [profile1, profile2];
-      injectableManager.addInjectableEntry(name, resolver1, dependencies, true, [profile1]);
-      injectableManager.addInjectableEntry(name, resolver2, dependencies, true, [profile2]);
+      injectableManager.addInjectableEntry(name, resolver1, dependencyNames, true, [profile1]);
+      injectableManager.addInjectableEntry(name, resolver2, dependencyNames, true, [profile2]);
 
       // Assert
       try {
@@ -270,8 +270,8 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
-      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencies);
+      let dependencyNames = ['dependencyNames'];
+      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries();
@@ -282,8 +282,8 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
-      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencies);
+      let dependencyNames = ['dependencyNames'];
+      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencyNames);
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries(['profile']);
@@ -297,12 +297,12 @@ describe('./injectableManager/InjectableManager.js', () => {
       let resolver1 = new InjectableResolver('resolver');
       let resolver2 = new InjectableResolver('resolver');
       let resolver3 = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
-      let injectableEntry1 = injectableManager.addInjectableEntry(name1, resolver1, dependencies);
-      let injectableEntry2 = injectableManager.addInjectableEntry(name2, resolver2, dependencies, true, [profile1]);
-      let injectableEntry3 = injectableManager.addInjectableEntry(name2, resolver3, dependencies, true, [profile2]);
+      let injectableEntry1 = injectableManager.addInjectableEntry(name1, resolver1, dependencyNames);
+      let injectableEntry2 = injectableManager.addInjectableEntry(name2, resolver2, dependencyNames, true, [profile1]);
+      let injectableEntry3 = injectableManager.addInjectableEntry(name2, resolver3, dependencyNames, true, [profile2]);
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries([profile1]);
@@ -315,10 +315,10 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencies = ['dependencies'];
+      let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
-      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencies, true, [profile1]);
+      let injectableEntry = injectableManager.addInjectableEntry(name, resolver, dependencyNames, true, [profile1]);
 
       // Assert
       let injectableEntries = injectableManager.getInjectableEntries([profile2]);

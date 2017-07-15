@@ -1,8 +1,8 @@
 {
   "name": "rue",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "nodejs dependency injection container",
-  "main": "index.js",
+  "main": "dist/",
   "engines": {
     "node": ">=6.11.1"
   },

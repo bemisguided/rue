@@ -22,7 +22,7 @@ import PromiseHelper from '../../lib/utils/PromiseHelper';
 
 describe('./util/PromiseHelper.js', () => {
 
-  describe('isPromise()', () => {
+  describe('PromiseHelper.isPromise()', () => {
 
     it('correctly identifies an ES6 Promise', () => {
       // Setup

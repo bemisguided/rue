@@ -63,13 +63,13 @@ describe('./container/Builder.js', () => {
       // Setup
       let dependency1 = 'dependency1';
       let dependency2 = 'dependency2';
-      let dependencies = [dependency1, dependency2];
+      let dependencyNames = [dependency1, dependency2];
 
       // Execute
       let result = builder.withDependencies(dependency1, dependency2);
 
       // Assert
-      expect(builder.dependencies).toEqual(dependencies);
+      expect(builder.dependencyNames).toEqual(dependencyNames);
       expect(result).toEqual(builder);
     });
 
@@ -103,7 +103,7 @@ describe('./container/Builder.js', () => {
       let profiles = [profile1, profile2];
       let dependency1 = 'dependency1';
       let dependency2 = 'dependency2';
-      let dependencies = [dependency1, dependency2];
+      let dependencyNames = [dependency1, dependency2];
 
       // Execute
       builder
@@ -120,7 +120,7 @@ describe('./container/Builder.js', () => {
       expect(injectableEntry).not.toBeNull();
       expect(injectableEntry.name).toEqual(name);
       expect(injectableEntry.singleton).toEqual(singleton);
-      expect(injectableEntry.dependencies).toEqual(dependencies);
+      expect(injectableEntry.dependencyNames).toEqual(dependencyNames);
       expect(injectableEntry.profiles).toEqual(profiles);
     });
 
