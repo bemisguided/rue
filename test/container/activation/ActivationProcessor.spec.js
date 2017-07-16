@@ -62,6 +62,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
       injectableEntry.singleton = true;
       injectableEntry.active = false;
+      injectableEntry.lifecycle = {};
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, []);
@@ -91,6 +92,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
       injectableEntry.singleton = true;
       injectableEntry.active = false;
+      injectableEntry.lifecycle = {};
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, []);
@@ -117,6 +119,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
       injectableEntry.singleton = true;
       injectableEntry.active = false;
+      injectableEntry.lifecycle = {};
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, []);
@@ -143,6 +146,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
       injectableEntry.singleton = false;
       injectableEntry.active = false;
+      injectableEntry.lifecycle = {};
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, []);
@@ -169,7 +173,8 @@ describe('./container/activation/ActivationProcessor.js', () => {
       let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
       injectableEntry.singleton = true;
       injectableEntry.active = false;
-      let dependencies = [{ value: 'test' }];
+      injectableEntry.lifecycle = {};
+      let dependencies = [{value: 'test'}];
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, dependencies);
@@ -193,6 +198,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.singleton = true;
       injectableEntry.active = true;
       injectableEntry.instance = expected;
+      injectableEntry.lifecycle = {};
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, []);
@@ -214,6 +220,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
       injectableEntry.singleton = false;
       injectableEntry.active = true;
+      injectableEntry.lifecycle = {};
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, []);
@@ -227,6 +234,160 @@ describe('./container/activation/ActivationProcessor.js', () => {
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
           expect(injectableEntry.instance).toBeUndefined();
+          done();
+        });
+
+    });
+
+    it('activates an Object that is a singleton and calls the post-construct lifecycle method', (done) => {
+      // Setup
+      class Service {
+        called: boolean;
+
+        constructor() {
+          this.called = false;
+        }
+
+        lifecyclePostConstruct() {
+          this.called = true;
+        }
+      }
+      let expected = new Service();
+      let stubInjectableResolver = new StubInjectableResolver(expected);
+      let name = 'test';
+      let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
+      injectableEntry.singleton = true;
+      injectableEntry.active = false;
+      injectableEntry.lifecycle = {
+        postConstruct: 'lifecyclePostConstruct',
+      };
+
+      // Execute
+      let promise = activationProcessor.activate(injectableEntry, []);
+
+      // Assert
+      promise
+        .then((injectable) => {
+          expect(injectable.called).toEqual(true);
+          done();
+        });
+
+    });
+
+    it('activates an Object that is a non-singleton and calls the post-construct lifecycle method', (done) => {
+      // Setup
+      class Service {
+        called: boolean;
+
+        constructor() {
+          this.called = false;
+        }
+
+        lifecyclePostConstruct() {
+          this.called = true;
+        }
+
+      }
+      let expected = new Service();
+      let stubInjectableResolver = new StubInjectableResolver(expected);
+      let name = 'test';
+      let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
+      injectableEntry.singleton = false;
+      injectableEntry.active = false;
+      injectableEntry.lifecycle = {
+        postConstruct: 'lifecyclePostConstruct',
+      };
+
+      // Execute
+      let promise = activationProcessor.activate(injectableEntry, []);
+
+      // Assert
+      promise
+        .then((injectable) => {
+          expect(injectable).toEqual(expected);
+          expect(injectable.called).toEqual(true);
+          done();
+        });
+
+    });
+
+    it('activates an Object calls the post-construct lifecycle method that returns a resolved Promise', (done) => {
+      // Setup
+      class Service {
+        called: boolean;
+
+        constructor() {
+          this.called = false;
+        }
+
+        postConstruct() {
+          return new Promise((resolve, reject) => {
+            this.called = true;
+            resolve();
+          });
+        }
+
+      }
+      let expected = new Service();
+      let stubInjectableResolver = new StubInjectableResolver(expected);
+      let name = 'test';
+      let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
+      injectableEntry.singleton = true;
+      injectableEntry.active = false;
+      injectableEntry.lifecycle = {
+        postConstruct: 'postConstruct',
+      };
+
+      // Execute
+      let promise = activationProcessor.activate(injectableEntry, []);
+
+      // Assert
+      promise
+        .then((injectable) => {
+          expect(injectable.called).toEqual(true);
+          done();
+        });
+
+    });
+
+    it('activates an Object calls the post-construct lifecycle method that returns a rejected Promise', (done) => {
+      // Setup
+      let expected = 'error message';
+      class Service {
+        called: boolean;
+
+        constructor() {
+          this.called = false;
+        }
+
+        postConstruct() {
+          return new Promise((resolve, reject) => {
+            this.called = true;
+            reject(expected);
+          });
+        }
+      }
+      let service = new Service();
+      let stubInjectableResolver = new StubInjectableResolver(service);
+      let name = 'test';
+      let injectableEntry = new InjectableEntry(name, stubInjectableResolver);
+      injectableEntry.singleton = true;
+      injectableEntry.active = false;
+      injectableEntry.lifecycle = {
+        postConstruct: 'postConstruct',
+      };
+
+      // Execute
+      let promise = activationProcessor.activate(injectableEntry, []);
+
+      // Assert
+      promise
+        .then((injectable) => {
+          expect(injectable.called).toEqual(true);
+          done();
+        })
+        .catch((error) => {
+          expect(error).toEqual(expected);
           done();
         });
 

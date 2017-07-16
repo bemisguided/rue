@@ -57,6 +57,22 @@ describe('./container/Builder.js', () => {
 
   });
 
+  describe('lifecyclePostConstruct()', () => {
+
+    it('correctly sets the lifecycle post-construct method', () => {
+      // Setup
+      let expected = 'postit';
+
+      // Execute
+      let result = builder.lifecyclePostConstruct(expected);
+
+      // Assert
+      expect(builder.lifecycle.postConstruct).toEqual(expected);
+      expect(result).toEqual(builder);
+    });
+
+  });
+
   describe('withDependencies()', () => {
 
     it('correctly sets the dependencies provided', () => {
