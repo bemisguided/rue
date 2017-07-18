@@ -22,6 +22,7 @@ import ActivationProcessor from '../../../lib/container/activation/ActivationPro
 import InjectableEntry from '../../../lib/container/injectables/InjectableEntry';
 import InjectableResolver from '../../../lib/container/injectables/InjectableResolver';
 import PromiseHelper from '../../../lib/utils/PromiseHelper';
+import ProxyHelper from '../../../lib/utils/ProxyHelper';
 
 class StubInjectableResolver extends InjectableResolver {
 
@@ -47,14 +48,16 @@ class StubInjectableResolver extends InjectableResolver {
 describe('./container/activation/ActivationProcessor.js', () => {
 
   let activationProcessor: ActivationProcessor;
+  let dependencies: Map<string, any>;
 
   beforeEach(() => {
     activationProcessor = new ActivationProcessor();
+    dependencies = new Map();
   });
 
   describe('ActivationProcessor.activate()', () => {
 
-    it('activates an Object without any dependencies as a singleton that is Proxy wrapped', (done) => {
+    it('activates an Object without any dependencies as a singleton and wraps it with a Swapable Proxy', (done) => {
       // Setup
       let expected = {};
       let stubInjectableResolver = new StubInjectableResolver(expected);
@@ -65,13 +68,13 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.lifecycle = {};
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
         .then((injectable) => {
           expect(injectable).toEqual(expected);
-          expect(injectable._$isProxy).toEqual(true);
+          expect(ProxyHelper.isSwapableProxy(injectable)).toEqual(true);
           expect(stubInjectableResolver.name).toEqual(name);
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
@@ -81,7 +84,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
 
     });
 
-    it('activates a Function without any dependencies as a singleton that is Proxy wrapped', (done) => {
+    it('activates a Function without any dependencies as a singleton and wraps it with a Swapable Proxy', (done) => {
       // Setup{
       let result = 'result';
       let fn = () => {
@@ -95,13 +98,13 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.lifecycle = {};
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
         .then((injectable) => {
           expect(injectable()).toEqual(result);
-          expect(injectable._$isProxy).toEqual(true);
+          expect(ProxyHelper.isSwapableProxy(injectable)).toEqual(true);
           expect(stubInjectableResolver.name).toEqual(name);
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
@@ -111,7 +114,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
 
     });
 
-    it('activates a string without any dependencies as a singleton that is not Proxy wrapped', (done) => {
+    it('activates a string without any dependencies as a singleton does not wrap it with a Swapable Proxy', (done) => {
       // Setup
       let expected = 'hello';
       let stubInjectableResolver = new StubInjectableResolver(expected);
@@ -122,13 +125,13 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.lifecycle = {};
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
         .then((injectable) => {
           expect(injectable).toEqual(expected);
-          expect(injectable._$isProxy).toBeUndefined();
+          expect(ProxyHelper.isSwapableProxy(injectable)).toEqual(false);
           expect(stubInjectableResolver.name).toEqual(name);
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
@@ -138,7 +141,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
 
     });
 
-    it('activates an Object not as a singleton that is not Proxy wrapped', (done) => {
+    it('activates an Object as a non-singleton and wraps it with a Swapable Proxy', (done) => {
       // Setup
       let expected = {};
       let stubInjectableResolver = new StubInjectableResolver(expected);
@@ -149,13 +152,13 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.lifecycle = {};
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
         .then((injectable) => {
           expect(injectable).toEqual(expected);
-          expect(injectable._$isProxy).toBeUndefined();
+          expect(ProxyHelper.isSwapableProxy(injectable)).toEqual(true);
           expect(stubInjectableResolver.name).toEqual(name);
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
@@ -174,7 +177,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.singleton = true;
       injectableEntry.active = false;
       injectableEntry.lifecycle = {};
-      let dependencies = [{value: 'test'}];
+      dependencies.set('test', {value: 'test'});
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, dependencies);
@@ -183,7 +186,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       promise
         .then((injectable) => {
           expect(stubInjectableResolver.name).toEqual(name);
-          expect(stubInjectableResolver.dependencies).toEqual(dependencies);
+          expect(stubInjectableResolver.dependencies).toEqual([... dependencies.values()]);
           done();
         });
 
@@ -201,7 +204,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.lifecycle = {};
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
@@ -212,7 +215,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
 
     });
 
-    it('re-activates an Object not as a singleton that is not Proxy wrapped when already activated', (done) => {
+    it('re-activates an Object as a non-singleton and wraps it with a Swapable Proxy', (done) => {
       // Setup
       let expected = {};
       let stubInjectableResolver = new StubInjectableResolver(expected);
@@ -223,13 +226,13 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.lifecycle = {};
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
         .then((injectable) => {
           expect(injectable).toEqual(expected);
-          expect(injectable._$isProxy).toBeUndefined();
+          expect(ProxyHelper.isSwapableProxy(injectable)).toEqual(true);
           expect(stubInjectableResolver.name).toEqual(name);
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
@@ -248,7 +251,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
           this.called = false;
         }
 
-        lifecyclePostConstruct() {
+        lifecyclePostInit() {
           this.called = true;
         }
       }
@@ -259,11 +262,11 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.singleton = true;
       injectableEntry.active = false;
       injectableEntry.lifecycle = {
-        postConstruct: 'lifecyclePostConstruct',
+        postInit: 'lifecyclePostInit',
       };
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
@@ -283,7 +286,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
           this.called = false;
         }
 
-        lifecyclePostConstruct() {
+        lifecyclePostInit() {
           this.called = true;
         }
 
@@ -295,11 +298,11 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.singleton = false;
       injectableEntry.active = false;
       injectableEntry.lifecycle = {
-        postConstruct: 'lifecyclePostConstruct',
+        postInit: 'lifecyclePostInit',
       };
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
@@ -320,7 +323,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
           this.called = false;
         }
 
-        postConstruct() {
+        postInit() {
           return new Promise((resolve, reject) => {
             this.called = true;
             resolve();
@@ -335,11 +338,11 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.singleton = true;
       injectableEntry.active = false;
       injectableEntry.lifecycle = {
-        postConstruct: 'postConstruct',
+        postInit: 'postInit',
       };
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise
@@ -360,7 +363,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
           this.called = false;
         }
 
-        postConstruct() {
+        postInit() {
           return new Promise((resolve, reject) => {
             this.called = true;
             reject(expected);
@@ -374,11 +377,11 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.singleton = true;
       injectableEntry.active = false;
       injectableEntry.lifecycle = {
-        postConstruct: 'postConstruct',
+        postInit: 'postInit',
       };
 
       // Execute
-      let promise = activationProcessor.activate(injectableEntry, []);
+      let promise = activationProcessor.activate(injectableEntry, dependencies);
 
       // Assert
       promise

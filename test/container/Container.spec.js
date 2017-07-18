@@ -39,6 +39,25 @@ class StubInjectableResolver extends InjectableResolver {
 
 }
 
+class StubFactoryInjectableResolver extends InjectableResolver {
+
+  factory: Function;
+
+  dependencies: Array<any>;
+
+  constructor(factory: Function) {
+    super();
+    this.factory = factory;
+  }
+
+  resolve(name: string, dependencies: Array<any>): Promise<any> {
+    this.dependencies = dependencies;
+    let result = Reflect.apply(this.factory, this, dependencies);
+    return PromiseHelper.wrapResolved(result);
+  }
+
+}
+
 describe('./container/Container.js', () => {
 
   let container: Container;
@@ -62,16 +81,10 @@ describe('./container/Container.js', () => {
           container.register(name, new StubInjectableResolver(expected), {singleton: true});
 
           // Activate
-          let promise = container.activate()
-            .then(() => {
+          container.activate()
+            .then((injectables) => {
+              let injectable = injectables.get(name);
 
-              // Retrieve the instance
-              return container.getInstance(name);
-            });
-
-          // Assert
-          promise
-            .then((injectable) => {
               // Assert activated instance
               expect(injectable).toEqual(expected);
 
@@ -100,16 +113,10 @@ describe('./container/Container.js', () => {
           container.register(name2, stubInjectableResolver2, {singleton: true});
 
           // Activate
-          let promise = container.activate()
-            .then(() => {
+          container.activate()
+            .then((injectables) => {
+              let injectable = injectables.get(name1);
 
-              // Retrieve the instance
-              return container.getInstance(name1);
-            });
-
-          // Assert
-          promise
-            .then((injectable) => {
               // Assert injectable
               expect(injectable).toEqual(expected1);
 
@@ -141,31 +148,28 @@ describe('./container/Container.js', () => {
           container.register(name, new StubInjectableResolver(expected), {singleton: false});
 
           // Activate
-          let promise = container.activate()
+          container.activate()
             .then(() => {
-
-              // Retrieve the instance
+              // Retrieve a new created instance
               return container.getInstance(name);
-            });
-
-          // Assert
-          promise
+            })
             .then((injectable) => {
               // Assert injectable
               expect(injectable).toEqual(expected);
 
               // Assert mapped dependencies
               let injectableEntry = container.injectableManager.injectableEntries[0];
-              expect(injectableEntry.dependencies.size).toEqual(0);
+              expect(injectableEntry.dependencies).toBeUndefined();
               done();
             })
             .catch((error) => {
+              console.log(error.stack);
               throw error;
             });
 
         });
 
-        it('activates non-singleton injectable correctly with a dependency then resolves the injectable', (done) => {
+        it('activates injectable correctly with a dependency then resolves the injectable', (done) => {
           // Setup
           let name1 = 'test1';
           let expected1 = {value: name1};
@@ -179,15 +183,11 @@ describe('./container/Container.js', () => {
           container.register(name2, stubInjectableResolver2, {singleton: false});
 
           // Activate
-          let promise = container.activate()
+          container.activate()
             .then(() => {
-
-              // Retrieve the instance
+              // Retrieve a new created instance
               return container.getInstance(name1);
-            });
-
-          // Assert
-          promise
+            })
             .then((injectable) => {
               // Assert injectable
               expect(injectable).toEqual(expected1);
@@ -198,7 +198,7 @@ describe('./container/Container.js', () => {
 
               // Assert mapped dependencies
               let injectableEntry = container.injectableManager.injectableEntries[0];
-              expect(injectableEntry.dependencies.get(name2)).toEqual(expected2);
+              expect(injectableEntry.dependencies).toBeUndefined();
               done();
             })
             .catch((error) => {
@@ -222,16 +222,10 @@ describe('./container/Container.js', () => {
         container.register(name, new StubInjectableResolver(expected), {profileNames: [profile1], singleton: true});
 
         // Activate
-        let promise = container.activate(profile1)
-          .then(() => {
+        container.activate(profile1)
+          .then((injectables) => {
+            let injectable = injectables.get(name);
 
-            // Retrieve the instance
-            return container.getInstance(name);
-          });
-
-        // Assert
-        promise
-          .then((injectable) => {
             // Assert injectable
             expect(injectable).toEqual(expected);
 
@@ -265,16 +259,10 @@ describe('./container/Container.js', () => {
         container.register(name2, stubInjectableResolver2, {profileNames: [profile1], singleton: true});
 
         // Activate
-        let promise = container.activate(profile1)
-          .then(() => {
+        container.activate(profile1)
+          .then((injectables) => {
+            let injectable = injectables.get(name1);
 
-            // Retrieve the instance
-            return container.getInstance(name1);
-          });
-
-        // Assert
-        promise
-          .then((injectable) => {
             // Assert injectable
             expect(injectable).toEqual(expected1);
 
@@ -327,34 +315,197 @@ describe('./container/Container.js', () => {
 
   describe('Container.replaceInstance()', () => {
 
-    it('correctly replaces a singleton instance via proxy', (done) => {
+    describe('replacing singleton dependencies', () => {
+
+      it('correctly replaces a singleton instance via proxy', (done) => {
+        // Setup
+        let name = 'test';
+        let expected1 = {value1: name};
+        let expected2 = {value2: name};
+
+        // Register
+        container.register(name, new StubInjectableResolver(expected1), {singleton: true});
+
+        // Activate
+        container.activate()
+          .then((injectables) => {
+            let injectable = injectables.get(name);
+
+            // Assert activated instance
+            expect(injectable).toEqual(expected1);
+
+            // Replace
+            container.replaceInstance(name, expected2);
+
+            // Assert after replace
+            expect(injectable).toEqual(expected2);
+            done();
+          })
+          .catch((error) => {
+            throw error;
+          });
+
+      });
+
+      it('throws error when attempting to replace a dependency that is not a proxy', (done) => {
+        // Setup
+        let name = 'test';
+        let expected1 = 'scalar';
+        let expected2 = {value1: name};
+
+        // Register
+        container.register(name, new StubInjectableResolver(expected1), {singleton: true});
+
+        // Activate
+        container.activate()
+          .then((injectables) => {
+            let injectable = injectables.get(name);
+
+            // Assert activated instance
+            expect(injectable).toEqual(expected1);
+
+            // Replace
+            container.replaceInstance(name, expected2);
+          })
+          .catch((error) => {
+            expect(error.message).toEqual('Dependency is not replaceable: name=test');
+            done();
+          });
+
+      });
+
+      it('throws error when attempting to replace a value that is not proxyable (i.e. not an Object or Function)', (done) => {
+        // Setup
+        let name = 'test';
+        let expected1 = {value1: name};
+        let expected2 = 'scalar';
+
+        // Register
+        container.register(name, new StubInjectableResolver(expected1), {singleton: true});
+
+        // Activate
+        container.activate()
+          .then((injectables) => {
+            let injectable = injectables.get(name);
+
+            // Assert activated instance
+            expect(injectable).toEqual(expected1);
+
+            // Replace
+            container.replaceInstance(name, expected2);
+          })
+          .catch((error) => {
+            expect(error.message).toEqual('Dependency replacement is not of a suitable type');
+            done();
+          });
+
+      });
+
+      it('throws error when attempting to replace a non-singleton dependency', (done) => {
+        // Setup
+        let name = 'test';
+        let expected1 = {value1: name};
+        let expected2 = {value2: name};
+
+        // Register
+        container.register(name, new StubInjectableResolver(expected1), {singleton: false});
+
+        // Execute
+        container.activate()
+          .then(() => {
+
+            // Replace
+            container.replaceInstance(name, expected2);
+          })
+          .catch((error) => {
+            expect(error.message).toEqual('Dependency is not a singleton: name=test');
+            done();
+          });
+
+      });
+
+      it('throws error when attempting to replace a non-active dependency', (done) => {
+        // Setup
+        let name = 'test';
+        let expected1 = {value1: name};
+        let expected2 = {value2: name};
+
+        // Register
+        container.register(name, new StubInjectableResolver(expected1), {profileNames: ['profile'], singleton: false});
+
+        // Execute
+        container.activate()
+          .then(() => {
+
+            // Replace
+            container.replaceInstance(name, expected2);
+          })
+          .catch((error) => {
+            expect(error.message).toEqual('Dependency is not found: name=test');
+            done();
+          });
+
+      });
+
+      it('throws error when attempting to replace a dependency that does not exist', (done) => {
+        // Setup
+        let name = 'test';
+        let expected = {value1: name};
+
+        // Assert
+        container.activate()
+          .then(() => {
+            // Replace
+            container.replaceInstance('fake', expected);
+          })
+          .catch((error) => {
+            expect(error.message).toEqual('Dependency is not found: name=fake');
+            done();
+          });
+
+      });
+
+    });
+
+  });
+
+  describe('replacing non-singleton dependencies', () => {
+
+    it('correctly replaces a non-singleton dependency of a singleton instance via proxy', (done) => {
       // Setup
-      let name = 'test';
-      let expected1 = {value1: name};
-      let expected2 = {value2: name};
+      let name1 = 'test1';
+      let name2 = 'test2';
+      let singleton = (dependency) => {
+        return {
+          value: dependency,
+        };
+      };
+      let expected1 = {value1: name1};
+      let expected2 = {value2: name1};
 
       // Register
-      container.register(name, new StubInjectableResolver(expected1), {singleton: true});
+      container.register(name1, new StubFactoryInjectableResolver(singleton), {
+        singleton: true,
+        dependencyNames: [name2],
+      });
+      container.register(name2, new StubInjectableResolver(expected1), {singleton: false});
 
       // Activate
-      let promise = container.activate()
-        .then(() => {
+      container.activate()
+        .then((dependencies) => {
 
-          // Retrieve the instance
-          return container.getInstance(name);
-        });
-
-      // Assert
-      promise
-        .then((injectable) => {
-          // Assert activated instance
-          expect(injectable).toEqual(expected1);
+          // Assert singleton instance dependency
+          let instance = dependencies.get(name1);
+          if (!instance) {
+            throw new Error('no instance');
+          }
+          expect(instance.value).toEqual(expected1);
 
           // Replace
-          container.replaceInstance(name, expected2);
+          container.replaceInstance(name2, expected2, name1);
 
           // Assert after replace
-          expect(injectable).toEqual(expected2);
+          expect(instance.value).toEqual(expected2);
           done();
         })
         .catch((error) => {
@@ -363,113 +514,33 @@ describe('./container/Container.js', () => {
 
     });
 
-    it('throws error when attempting to replace a dependency that is not a proxy', (done) => {
+    it('throws error when attempting to replace a dependency that does not exist', (done) => {
       // Setup
-      let name = 'test';
-      let expected1 = 'scalar';
-      let expected2 = {value1: name};
+      let name1 = 'test1';
+      let name2 = 'test2';
+      let singleton = (dependency) => {
+        return {
+          value: dependency,
+        };
+      };
+      let expected1 = {value1: name1};
+      let expected2 = {value2: name1};
 
       // Register
-      container.register(name, new StubInjectableResolver(expected1), {singleton: true});
-
-      // Activate
-      let promise = container.activate()
-        .then(() => {
-
-          // Retrieve the instance
-          return container.getInstance(name);
-        });
+      container.register(name1, new StubFactoryInjectableResolver(singleton), {
+        singleton: true,
+        dependencyNames: [name2],
+      });
+      container.register(name2, new StubInjectableResolver(expected1), {singleton: false});
 
       // Assert
-      promise
-        .then((injectable) => {
-          // Assert activated instance
-          expect(injectable).toEqual(expected1);
-
-          // Replace
-          container.replaceInstance(name, expected2);
-        })
-        .catch((error) => {
-          expect(error.message).toEqual('Dependency is not replaceable: name=test');
-          done();
-        });
-
-    });
-
-    it('throws error when attempting to replace a value that is not proxyable (i.e. not an Object or Function)', (done) => {
-      // Setup
-      let name = 'test';
-      let expected1 = {value1: name};
-      let expected2 = 'scalar';
-
-      // Register
-      container.register(name, new StubInjectableResolver(expected1), {singleton: true});
-
-      // Activate
-      let promise = container.activate()
-        .then(() => {
-
-          // Retrieve the instance
-          return container.getInstance(name);
-        });
-
-      // Assert
-      promise
-        .then((injectable) => {
-          // Assert activated instance
-          expect(injectable).toEqual(expected1);
-
-          // Replace
-          container.replaceInstance(name, expected2);
-        })
-        .catch((error) => {
-          expect(error.message).toEqual('Dependency replacement is not of a suitable type');
-          done();
-        });
-
-    });
-
-    it('throws error when attempting to replace a non-singleton dependency', (done) => {
-      // Setup
-      let name = 'test';
-      let expected1 = {value1: name};
-      let expected2 = {value2: name};
-
-      // Register
-      container.register(name, new StubInjectableResolver(expected1), {singleton: false});
-
-      // Execute
       container.activate()
         .then(() => {
-
           // Replace
-          container.replaceInstance(name, expected2);
+          container.replaceInstance('fake', expected2, name1);
         })
         .catch((error) => {
-          expect(error.message).toEqual('Dependency is not a singleton: name=test');
-          done();
-        });
-
-    });
-
-    it('throws error when attempting to replace a non-active dependency', (done) => {
-      // Setup
-      let name = 'test';
-      let expected1 = {value1: name};
-      let expected2 = {value2: name};
-
-      // Register
-      container.register(name, new StubInjectableResolver(expected1), {profileNames: ['profile'], singleton: false});
-
-      // Execute
-      container.activate()
-        .then(() => {
-
-          // Replace
-          container.replaceInstance(name, expected2);
-        })
-        .catch((error) => {
-          expect(error.message).toEqual('Dependency is not found: name=test');
+          expect(error.message).toEqual('Dependency is not found: name=fake');
           done();
         });
 
@@ -477,14 +548,28 @@ describe('./container/Container.js', () => {
 
     it('throws error when attempting to replace a dependency that does not exist', (done) => {
       // Setup
-      let name = 'test';
-      let expected = {value1: name};
+      let name1 = 'test1';
+      let name2 = 'test2';
+      let singleton = (dependency) => {
+        return {
+          value: dependency,
+        };
+      };
+      let expected1 = {value1: name1};
+      let expected2 = {value2: name1};
+
+      // Register
+      container.register(name1, new StubFactoryInjectableResolver(singleton), {
+        singleton: true,
+        dependencyNames: [name2],
+      });
+      container.register(name2, new StubInjectableResolver(expected1), {singleton: false});
 
       // Assert
       container.activate()
         .then(() => {
           // Replace
-          container.replaceInstance('fake', expected);
+          container.replaceInstance(name1, expected2, 'fake');
         })
         .catch((error) => {
           expect(error.message).toEqual('Dependency is not found: name=fake');
