@@ -19,7 +19,7 @@
  */
 import ServiceInjectableResolver from '../../lib/service/ServiceInjectableResolver';
 
-describe('./injectableManager/ServiceInjectableResolver.js', () => {
+describe('./service/ServiceInjectableResolver.js', () => {
 
   it('resolves a service class by forwarding dependencies to a constructor', () => {
     // Setup

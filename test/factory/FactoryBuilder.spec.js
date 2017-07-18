@@ -32,12 +32,12 @@ describe('./factory/FactoryBuilder.js', () => {
     builder = FactoryBuilder.create(name, container);
   });
 
-  describe('module()', () => {
+  describe('useFunction()', () => {
 
-    it('correctly sets the module provided with a FactoryInjectableResolver', () => {
+    it('correctly sets the factory Function provided with a FactoryInjectableResolver', () => {
 
       // Execute
-      let result = builder.module(() => {
+      let result = builder.useFunction(() => {
       });
 
       // Assert

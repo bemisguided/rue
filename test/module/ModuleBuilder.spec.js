@@ -18,32 +18,45 @@
  * @flow
  */
 import Container from '../../lib/container/Container';
-import ServiceBuilder from '../../lib/service/ServiceBuilder';
+import ModuleBuilder from '../../lib/module/ModuleBuilder';
 
-describe('./service/ServiceBuilder.js', () => {
+describe('./module/ModuleBuilder.js', () => {
 
   let container: Container;
-  let builder: ServiceBuilder;
+  let builder: ModuleBuilder;
   let name: string;
 
   beforeEach(() => {
     name = 'test';
     container = new Container();
-    builder = ServiceBuilder.create(name, container);
+    builder = ModuleBuilder.create(name, container);
   });
 
-  describe('useObject()', () => {
+  describe('lifecycleInit()', () => {
 
-    it('correctly sets the module provided with a ServiceInjectableResolver', () => {
+    it('correctly sets the lifecycle init function name', () => {
+      // Setup
+      let fn = 'initDat';
 
       // Execute
-      let result = builder.useObject(class Service {
-        constructor() {
-        }
-      });
+      let result = builder.lifecycleInit(fn);
 
       // Assert
-      expect(builder.resolver.constructor.name).toEqual('ServiceInjectableResolver');
+      expect(builder.lifecycle.init).toEqual(fn);
+      expect(result).toEqual(builder);
+    });
+
+  });
+
+  describe('useModule()', () => {
+
+    it('correctly sets the module provided with a ModuleInjectableResolver', () => {
+
+      // Execute
+      let result = builder.useModule({});
+
+      // Assert
+      expect(builder.resolver.constructor.name).toEqual('ModuleInjectableResolver');
       expect(result).toEqual(builder);
     });
 

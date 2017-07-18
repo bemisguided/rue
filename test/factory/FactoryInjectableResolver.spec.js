@@ -19,7 +19,7 @@
  */
 import FactoryInjectableResolver from '../../lib/factory/FactoryInjectableResolver';
 
-describe('./injectableManager/FactoryInjectableResolver.js', () => {
+describe('./factory/FactoryInjectableResolver.js', () => {
 
   it('resolves a factory method by forwarding dependencies when result is a Promise', () => {
     // Setup

@@ -24,11 +24,19 @@
 ```javascript 1.7
 const rue = require('rue');
 
+// Configure a module for any profile (the default) to be initialized
+// using the function `start` (default is `init`)
+rue
+  .module('SomeModule')
+  .useObject(require('./lib/SomeModule'))
+  .lifecycleInit('start')
+  .done();
+
 // Configures some API service that is constructed with a factory method
 // available only in the `production` profile as a singletone (the default)
 rue
   .factory('SomeApiService')
-  .module(require('./api/SomeApiService'))
+  .useFunction(require('./api/SomeApiService'))
   .withProfiles('production')
   .done();
 
@@ -36,7 +44,7 @@ rue
 // available in the `test` profile
 rue
   .factory('SomeApiService')
-  .module(require('./api/StubSomeApiService'))
+  .useFunction(require('./api/StubSomeApiService'))
   .isSingleton(false)
   .withProfiles('test')
   .done();
@@ -46,7 +54,7 @@ rue
 // business service is available to all profiles (the default).
 rue
   .service('SomeBusinessService')
-  .module(require('./service/SomeBusinessService'))
+  .useObject(require('./service/SomeBusinessService'))
   .withDependencies('SomeApiService')
   .done();
 
