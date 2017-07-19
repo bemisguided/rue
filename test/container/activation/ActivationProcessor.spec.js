@@ -163,6 +163,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
           expect(injectableEntry.instance).toBeUndefined();
+          expect(injectableEntry.instances).toEqual([expected]);
           done();
         });
 
@@ -224,6 +225,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
       injectableEntry.singleton = false;
       injectableEntry.active = true;
       injectableEntry.lifecycle = {};
+      injectableEntry.instances = [expected];
 
       // Execute
       let promise = activationProcessor.activate(injectableEntry, dependencies);
@@ -237,6 +239,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
           expect(stubInjectableResolver.dependencies).toEqual([]);
           expect(injectableEntry.active).toBeTruthy();
           expect(injectableEntry.instance).toBeUndefined();
+          expect(injectableEntry.instances).toEqual([expected, expected]);
           done();
         });
 
