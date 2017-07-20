@@ -48,6 +48,23 @@ describe('./module/ModuleBuilder.js', () => {
 
   });
 
+  describe('isSingleton()', () => {
+
+    it('throws error when attempting to configure as non-singleton', () => {
+
+      // Execute
+      try {
+
+        let result = builder.isSingleton(false);
+      } catch (error) {
+        expect(error.message).toEqual('Cannot configure a module to be a non-singleton');
+        return;
+      }
+      throw 'Expect an error';
+    });
+
+  });
+
   describe('useModule()', () => {
 
     it('correctly sets the module provided with a ModuleInjectableResolver', () => {
