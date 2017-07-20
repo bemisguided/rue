@@ -38,7 +38,7 @@ describe('./injectableManager/dependencies/StandardDependencyResolver.js', () =>
     it('resolve a dependency without any profiles provided', () => {
       // Setup
       let name = 'test';
-      container.register(name, new InjectableResolver());
+      container.registerDependency(name, new InjectableResolver());
       context.name = name;
       let resolver = new StandardDependencyResolver();
 
@@ -59,7 +59,7 @@ describe('./injectableManager/dependencies/StandardDependencyResolver.js', () =>
       let name = 'test';
       let profile = 'profile';
       let profiles = [profile];
-      container.register(name, new InjectableResolver(), {profileNames: profiles});
+      container.registerDependency(name, new InjectableResolver(), {profileNames: profiles});
       context.name = name;
       context.activeProfiles = profiles;
       let resolver = new StandardDependencyResolver();
@@ -81,7 +81,7 @@ describe('./injectableManager/dependencies/StandardDependencyResolver.js', () =>
       let name = 'test';
       let profile = 'profile';
       let profiles = [profile];
-      container.register(name, new InjectableResolver(), {profileNames: profiles});
+      container.registerDependency(name, new InjectableResolver(), {profileNames: profiles});
       context.name = name;
       let resolver = new StandardDependencyResolver();
 

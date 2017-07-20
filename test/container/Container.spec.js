@@ -78,7 +78,7 @@ describe('./container/Container.js', () => {
           let expected = {value: name};
 
           // Register
-          container.register(name, new StubInjectableResolver(expected), {singleton: true});
+          container.registerDependency(name, new StubInjectableResolver(expected), {singleton: true});
 
           // Activate
           container.activate()
@@ -109,8 +109,8 @@ describe('./container/Container.js', () => {
           let stubInjectableResolver2 = new StubInjectableResolver(expected2);
 
           // Register
-          container.register(name1, stubInjectableResolver1, {dependencyNames: [name2], singleton: true});
-          container.register(name2, stubInjectableResolver2, {singleton: true});
+          container.registerDependency(name1, stubInjectableResolver1, {dependencyNames: [name2], singleton: true});
+          container.registerDependency(name2, stubInjectableResolver2, {singleton: true});
 
           // Activate
           container.activate()
@@ -145,7 +145,7 @@ describe('./container/Container.js', () => {
           let expected = {value: name};
 
           // Register
-          container.register(name, new StubInjectableResolver(expected), {singleton: false});
+          container.registerDependency(name, new StubInjectableResolver(expected), {singleton: false});
 
           // Activate
           container.activate()
@@ -179,8 +179,8 @@ describe('./container/Container.js', () => {
           let stubInjectableResolver2 = new StubInjectableResolver(expected2);
 
           // Register
-          container.register(name1, stubInjectableResolver1, {dependencyNames: [name2], singleton: false});
-          container.register(name2, stubInjectableResolver2, {singleton: false});
+          container.registerDependency(name1, stubInjectableResolver1, {dependencyNames: [name2], singleton: false});
+          container.registerDependency(name2, stubInjectableResolver2, {singleton: false});
 
           // Activate
           container.activate()
@@ -219,7 +219,7 @@ describe('./container/Container.js', () => {
         let profile1 = 'profile1';
 
         // Register
-        container.register(name, new StubInjectableResolver(expected), {profileNames: [profile1], singleton: true});
+        container.registerDependency(name, new StubInjectableResolver(expected), {profileNames: [profile1], singleton: true});
 
         // Activate
         container.activate(profile1)
@@ -251,12 +251,12 @@ describe('./container/Container.js', () => {
         let profile1 = 'profile1';
 
         // Register
-        container.register(name1, stubInjectableResolver1, {
+        container.registerDependency(name1, stubInjectableResolver1, {
           dependencyNames: [name2],
           profileNames: [profile1],
           singleton: true,
         });
-        container.register(name2, stubInjectableResolver2, {profileNames: [profile1], singleton: true});
+        container.registerDependency(name2, stubInjectableResolver2, {profileNames: [profile1], singleton: true});
 
         // Activate
         container.activate(profile1)
@@ -295,8 +295,8 @@ describe('./container/Container.js', () => {
         let stubInjectableResolver2 = new StubInjectableResolver(expected2);
 
         // Register
-        container.register(name1, stubInjectableResolver1, {dependencyNames: ['?fake', name2], singleton: true});
-        container.register(name2, stubInjectableResolver2, {singleton: true});
+        container.registerDependency(name1, stubInjectableResolver1, {dependencyNames: ['?fake', name2], singleton: true});
+        container.registerDependency(name2, stubInjectableResolver2, {singleton: true});
 
         // Activate
         container.activate()
@@ -333,8 +333,8 @@ describe('./container/Container.js', () => {
       let stubInjectableResolver2 = new StubInjectableResolver(expected2);
 
       // Register
-      container.register(name1, stubInjectableResolver1, {dependencyNames: ['+fake', name2], singleton: true});
-      container.register(name2, stubInjectableResolver2, {singleton: true});
+      container.registerDependency(name1, stubInjectableResolver1, {dependencyNames: ['+fake', name2], singleton: true});
+      container.registerDependency(name2, stubInjectableResolver2, {singleton: true});
 
       // Activate
       container.activate()
@@ -369,7 +369,7 @@ describe('./container/Container.js', () => {
       let expected = {value: name};
 
       // Register
-      container.register(name, new StubInjectableResolver(expected), {singleton: true});
+      container.registerDependency(name, new StubInjectableResolver(expected), {singleton: true});
 
       // Activate
       let promise = container.activate()
@@ -400,7 +400,7 @@ describe('./container/Container.js', () => {
         let expected2 = {value2: name};
 
         // Register
-        container.register(name, new StubInjectableResolver(expected1), {singleton: true});
+        container.registerDependency(name, new StubInjectableResolver(expected1), {singleton: true});
 
         // Activate
         container.activate()
@@ -430,7 +430,7 @@ describe('./container/Container.js', () => {
         let expected2 = {value1: name};
 
         // Register
-        container.register(name, new StubInjectableResolver(expected1), {singleton: true});
+        container.registerDependency(name, new StubInjectableResolver(expected1), {singleton: true});
 
         // Activate
         container.activate()
@@ -457,7 +457,7 @@ describe('./container/Container.js', () => {
         let expected2 = 'scalar';
 
         // Register
-        container.register(name, new StubInjectableResolver(expected1), {singleton: true});
+        container.registerDependency(name, new StubInjectableResolver(expected1), {singleton: true});
 
         // Activate
         container.activate()
@@ -484,7 +484,7 @@ describe('./container/Container.js', () => {
         let expected2 = {value2: name};
 
         // Register
-        container.register(name, new StubInjectableResolver(expected1), {singleton: false});
+        container.registerDependency(name, new StubInjectableResolver(expected1), {singleton: false});
 
         // Execute
         container.activate()
@@ -507,7 +507,7 @@ describe('./container/Container.js', () => {
         let expected2 = {value2: name};
 
         // Register
-        container.register(name, new StubInjectableResolver(expected1), {profileNames: ['profile'], singleton: false});
+        container.registerDependency(name, new StubInjectableResolver(expected1), {profileNames: ['profile'], singleton: false});
 
         // Execute
         container.activate()
@@ -560,11 +560,11 @@ describe('./container/Container.js', () => {
       let expected2 = {value2: name1};
 
       // Register
-      container.register(name1, new StubFactoryInjectableResolver(singleton), {
+      container.registerDependency(name1, new StubFactoryInjectableResolver(singleton), {
         singleton: true,
         dependencyNames: [name2],
       });
-      container.register(name2, new StubInjectableResolver(expected1), {singleton: false});
+      container.registerDependency(name2, new StubInjectableResolver(expected1), {singleton: false});
 
       // Activate
       container.activate()
@@ -603,11 +603,11 @@ describe('./container/Container.js', () => {
       let expected2 = {value2: name1};
 
       // Register
-      container.register(name1, new StubFactoryInjectableResolver(singleton), {
+      container.registerDependency(name1, new StubFactoryInjectableResolver(singleton), {
         singleton: true,
         dependencyNames: [name2],
       });
-      container.register(name2, new StubInjectableResolver(expected1), {singleton: false});
+      container.registerDependency(name2, new StubInjectableResolver(expected1), {singleton: false});
 
       // Assert
       container.activate()
@@ -635,11 +635,11 @@ describe('./container/Container.js', () => {
       let expected2 = {value2: name1};
 
       // Register
-      container.register(name1, new StubFactoryInjectableResolver(singleton), {
+      container.registerDependency(name1, new StubFactoryInjectableResolver(singleton), {
         singleton: true,
         dependencyNames: [name2],
       });
-      container.register(name2, new StubInjectableResolver(expected1), {singleton: false});
+      container.registerDependency(name2, new StubInjectableResolver(expected1), {singleton: false});
 
       // Assert
       container.activate()
