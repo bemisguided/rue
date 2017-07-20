@@ -31,7 +31,7 @@ class StubDependencyProcessor extends DependencyProcessor {
     this.results = results;
   }
 
-  resolve(name: string): ?InjectableEntry  {
+  resolve(name: string): ?InjectableEntry {
     return this.results.get(name);
   }
 
@@ -191,7 +191,31 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       expect(iterator.next().value).toEqual(injectableEntry4);
     });
 
-    it('throws error when a dependency cannot be resolved', () => {
+    it('ignores when a dependency cannot be resolved and is optional', () => {
+      // Setup
+      let name1 = 'test1';
+      let name2 = 'test2';
+      let name3 = 'test3';
+      let resolver1 = new InjectableResolver('resolver');
+      let injectableEntry1 = new InjectableEntry(name1, resolver1);
+      injectableEntry1.dependencyNames = [name2, '?' + name3];
+      injectableEntryMap.set(name1, injectableEntry1);
+
+      let resolver2 = new InjectableResolver('resolver');
+      let injectableEntry2 = new InjectableEntry(name2, resolver2);
+      injectableEntry2.dependencyNames = ['+' + name3];
+      injectableEntryMap.set(name2, injectableEntry2);
+
+      // Execute
+      let dependencyEntities = dependencyTraverser.traverse(new Set(injectableEntryMap.values()));
+
+      // Assert
+      let iterator = dependencyEntities.values();
+      expect(iterator.next().value).toEqual(injectableEntry2);
+      expect(iterator.next().value).toEqual(injectableEntry1);
+    });
+
+    it('throws error when a dependency cannot be resolved and is required', () => {
       // Setup
       let name1 = 'test1';
       let name2 = 'test2';
@@ -204,7 +228,7 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       let resolver2 = new InjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = [name3];
-      injectableEntryMap.set(name1, injectableEntry2);
+      injectableEntryMap.set(name2, injectableEntry2);
 
       // Assert
       try {
