@@ -26,13 +26,13 @@ class StubContainer extends Container {
 
   name: string;
 
-  parentName: ?string;
+  parent: ?string;
 
   replacement: any;
 
-  replaceInstance(name: string, replacement: any, parentName: ?string): any {
+  replaceInstance(name: string, replacement: any, parent: ?string): any {
     this.name = name;
-    this.parentName = parentName;
+    this.parent = parent;
     this.replacement = replacement;
     return this.instance;
   }
@@ -63,11 +63,11 @@ describe('./test/TestContainer.js', () => {
 
       // Assert
       expect(stubContainer.name).toEqual(name);
-      expect(stubContainer.parentName).toBeUndefined();
+      expect(stubContainer.parent).toBeUndefined();
       expect(stubContainer.replacement).toEqual(expected2);
       expect(testContainer.replacements[0]).toEqual({
         name: name,
-        parentName: undefined,
+        parent: undefined,
         instance: expected1,
       });
     });
@@ -75,21 +75,21 @@ describe('./test/TestContainer.js', () => {
     it('correctly swaps an indirect instance and records the replacement', () => {
       // Setup
       let name = 'test';
-      let parentName = 'testParent';
+      let parent = 'testParent';
       let expected1 = {value1: name};
       let expected2 = {value2: name};
       stubContainer.instance = expected1;
 
       // Execute
-      testContainer.swap(name, expected2, parentName);
+      testContainer.swap(name, expected2, parent);
 
       // Assert
       expect(stubContainer.name).toEqual(name);
-      expect(stubContainer.parentName).toEqual(parentName);
+      expect(stubContainer.parent).toEqual(parent);
       expect(stubContainer.replacement).toEqual(expected2);
       expect(testContainer.replacements[0]).toEqual({
         name: name,
-        parentName: parentName,
+        parent: parent,
         instance: expected1,
       });
     });
@@ -106,7 +106,7 @@ describe('./test/TestContainer.js', () => {
       try {
         testContainer.swap(name, expected2);
       } catch (error) {
-        expect(error.message).toEqual('Test replacement already exists: name=test parentName=');
+        expect(error.message).toEqual('Test replacement already exists: name=test parent=');
         return;
       }
       throw 'Expect an error';
@@ -115,17 +115,17 @@ describe('./test/TestContainer.js', () => {
     it('throws error when swaping a duplicate indirect instance', () => {
       // Setup
       let name = 'test';
-      let parentName = 'testParent';
+      let parent = 'testParent';
       let expected1 = {value1: name};
       let expected2 = {value2: name};
       stubContainer.instance = expected1;
-      testContainer.swap(name, expected2, parentName);
+      testContainer.swap(name, expected2, parent);
 
       // Execute
       try {
-        testContainer.swap(name, expected2, parentName);
+        testContainer.swap(name, expected2, parent);
       } catch (error) {
-        expect(error.message).toEqual('Test replacement already exists: name=test parentName=testParent');
+        expect(error.message).toEqual('Test replacement already exists: name=test parent=testParent');
         return;
       }
       throw 'Expect an error';
@@ -133,28 +133,28 @@ describe('./test/TestContainer.js', () => {
 
   });
 
-  describe('reset()', () => {
+  describe('resetSwaps()', () => {
 
     it('correctly resets replaced instances', () => {
       // Setup
       let name = 'test';
-      let parentName = 'testParent';
+      let parent = 'testParent';
       let expected1 = {value1: name};
       let expected2 = {value2: name};
       stubContainer.instance = expected2;
       let replacement = {
         name: name,
-        parentName: parentName,
+        parent: parent,
         instance: expected1,
       };
       testContainer.replacements.push(replacement);
 
       // Execute
-      testContainer.reset();
+      testContainer.resetSwaps();
 
       // Assert
       expect(stubContainer.name).toEqual(name);
-      expect(stubContainer.parentName).toEqual(parentName);
+      expect(stubContainer.parent).toEqual(parent);
       expect(stubContainer.replacement).toEqual(expected1);
       expect(testContainer.replacements.length).toEqual(0);
     });
