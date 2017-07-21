@@ -29,7 +29,7 @@ describe('./factory/FactoryBuilder.js', () => {
   beforeEach(() => {
     name = 'test';
     container = new Container();
-    builder = FactoryBuilder.create(name, container);
+    builder = new FactoryBuilder(name, container);
   });
 
   describe('useFunction()', () => {

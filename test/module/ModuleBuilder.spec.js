@@ -29,7 +29,7 @@ describe('./module/ModuleBuilder.js', () => {
   beforeEach(() => {
     name = 'test';
     container = new Container();
-    builder = ModuleBuilder.create(name, container);
+    builder = new ModuleBuilder(name, container);
   });
 
   describe('lifecycleInit()', () => {

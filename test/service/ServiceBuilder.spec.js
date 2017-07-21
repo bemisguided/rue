@@ -29,7 +29,7 @@ describe('./service/ServiceBuilder.js', () => {
   beforeEach(() => {
     name = 'test';
     container = new Container();
-    builder = ServiceBuilder.create(name, container);
+    builder = new ServiceBuilder(name, container);
   });
 
   describe('useObject()', () => {
