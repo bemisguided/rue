@@ -411,10 +411,11 @@ describe('./container/Container.js', () => {
             expect(injectable).toEqual(expected1);
 
             // Replace
-            container.replaceInstance(name, expected2);
+            let oldInstance =container.replaceInstance(name, expected2);
 
             // Assert after replace
             expect(injectable).toEqual(expected2);
+            expect(oldInstance).toEqual(expected1);
             done();
           })
           .catch((error) => {
@@ -578,10 +579,11 @@ describe('./container/Container.js', () => {
           expect(instance.value).toEqual(expected1);
 
           // Replace
-          container.replaceInstance(name2, expected2, name1);
+          let oldInstance = container.replaceInstance(name2, expected2, name1);
 
           // Assert after replace
           expect(instance.value).toEqual(expected2);
+          expect(oldInstance).toEqual(expected1);
           done();
         })
         .catch((error) => {

@@ -21,6 +21,26 @@ import ProxyHelper from '../../lib/utils/ProxyHelper';
 
 describe('./util/ProxyHelper.js', () => {
 
+  describe('ProxyHelper.getProxyTarget()', () => {
+
+    it('correctly identifies itself as a Proxy', () => {
+      // Setup
+      let target = {
+        test: 'hello',
+      };
+      let proxy = ProxyHelper.swapableProxy(target);
+
+      // Execute
+      expect(ProxyHelper.getProxyTarget(proxy)).toEqual(target);
+    });
+
+    it('correctly returns undefined when not a Proxy', () => {
+      // Execute
+      expect(ProxyHelper.getProxyTarget({})).toBeUndefined();
+    });
+
+  });
+
   describe('ProxyHelper.isProxyable()', () => {
 
     it('correctly identifies an Object as being proxyable', () => {
