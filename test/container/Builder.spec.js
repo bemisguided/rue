@@ -19,6 +19,7 @@
  */
 import Builder from '../../lib/container/Builder';
 import Container from '../../lib/container/Container';
+import InjectableFilter from '../../lib/container/injectables/InjectableFilter';
 import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
 
 describe('./container/Builder.js', () => {
@@ -86,6 +87,22 @@ describe('./container/Builder.js', () => {
 
       // Assert
       expect(builder.dependencyNames).toEqual(dependencyNames);
+      expect(result).toEqual(builder);
+    });
+
+  });
+
+  describe('withFilter()', () => {
+
+    it('correctly sets the profiles provided', () => {
+      // Setup
+      let filter = new InjectableFilter();
+
+      // Execute
+      let result = builder.withFilter(filter);
+
+      // Assert
+      expect(builder.filter).toEqual(filter);
       expect(result).toEqual(builder);
     });
 

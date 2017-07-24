@@ -18,6 +18,7 @@
  * @flow
  */
 import Container from '../../lib/container/Container';
+import InjectableFilter from '../../lib/container/injectables/InjectableFilter';
 import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
 import PromiseHelper from '../../lib/utils/PromiseHelper';
 
@@ -54,6 +55,23 @@ class StubFactoryInjectableResolver extends InjectableResolver {
     this.dependencies = dependencies;
     let result = Reflect.apply(this.factory, this, dependencies);
     return PromiseHelper.wrapResolved(result);
+  }
+
+}
+
+class StubInjectableFilter extends InjectableFilter {
+
+  name: string;
+
+  dependencyName: string;
+
+  instance: any;
+
+  filter(name: string, dependencyName: string, instance: any): any {
+    this.name = name;
+    this.dependencyName = dependencyName;
+    this.instance = instance;
+    return instance;
   }
 
 }
@@ -206,6 +224,7 @@ describe('./container/Container.js', () => {
             });
 
         });
+
       });
 
     });
@@ -219,7 +238,10 @@ describe('./container/Container.js', () => {
         let profile1 = 'profile1';
 
         // Register
-        container.registerDependency(name, new StubInjectableResolver(expected), {profileNames: [profile1], singleton: true});
+        container.registerDependency(name, new StubInjectableResolver(expected), {
+          profileNames: [profile1],
+          singleton: true,
+        });
 
         // Activate
         container.activate(profile1)
@@ -295,7 +317,10 @@ describe('./container/Container.js', () => {
         let stubInjectableResolver2 = new StubInjectableResolver(expected2);
 
         // Register
-        container.registerDependency(name1, stubInjectableResolver1, {dependencyNames: ['?fake', name2], singleton: true});
+        container.registerDependency(name1, stubInjectableResolver1, {
+          dependencyNames: ['?fake', name2],
+          singleton: true,
+        });
         container.registerDependency(name2, stubInjectableResolver2, {singleton: true});
 
         // Activate
@@ -321,44 +346,81 @@ describe('./container/Container.js', () => {
 
       });
 
-    });
+      it('activates injectable correctly with an option dependency using the + notation then resolves the injectable', (done) => {
+        // Setup
+        let name1 = 'test1';
+        let expected1 = {value: name1};
+        let stubInjectableResolver1 = new StubInjectableResolver(expected1);
+        let name2 = 'test2';
+        let expected2 = {value: name2};
+        let stubInjectableResolver2 = new StubInjectableResolver(expected2);
 
-    it('activates injectable correctly with an option dependency using the + notation then resolves the injectable', (done) => {
-      // Setup
-      let name1 = 'test1';
-      let expected1 = {value: name1};
-      let stubInjectableResolver1 = new StubInjectableResolver(expected1);
-      let name2 = 'test2';
-      let expected2 = {value: name2};
-      let stubInjectableResolver2 = new StubInjectableResolver(expected2);
-
-      // Register
-      container.registerDependency(name1, stubInjectableResolver1, {dependencyNames: ['+fake', name2], singleton: true});
-      container.registerDependency(name2, stubInjectableResolver2, {singleton: true});
-
-      // Activate
-      container.activate()
-        .then((injectables) => {
-          let injectable = injectables.get(name1);
-
-          // Assert injectable
-          expect(injectable).toEqual(expected1);
-
-          // Assert resolver dependencies
-          expect(stubInjectableResolver1.dependencies).toEqual([undefined, expected2]);
-          expect(stubInjectableResolver2.dependencies).toEqual([]);
-
-          // Assert mapped dependencies
-          let injectableEntry = container.injectableManager.injectableEntries[0];
-          expect(injectableEntry.dependencies.get(name2)).toEqual(expected2);
-          done();
-        })
-        .catch((error) => {
-          throw error;
+        // Register
+        container.registerDependency(name1, stubInjectableResolver1, {
+          dependencyNames: ['+fake', name2],
+          singleton: true,
         });
+        container.registerDependency(name2, stubInjectableResolver2, {singleton: true});
+
+        // Activate
+        container.activate()
+          .then((injectables) => {
+            let injectable = injectables.get(name1);
+
+            // Assert injectable
+            expect(injectable).toEqual(expected1);
+
+            // Assert resolver dependencies
+            expect(stubInjectableResolver1.dependencies).toEqual([undefined, expected2]);
+            expect(stubInjectableResolver2.dependencies).toEqual([]);
+
+            // Assert mapped dependencies
+            let injectableEntry = container.injectableManager.injectableEntries[0];
+            expect(injectableEntry.dependencies.get(name2)).toEqual(expected2);
+            done();
+          })
+          .catch((error) => {
+            throw error;
+          });
+
+      });
 
     });
 
+    describe('with filter', () => {
+
+      it('', (done) => {
+        // Setup
+        let name = 'injectable';
+        let dependencyName = 'dependency';
+        let expected = {value: name};
+        let filter = new StubInjectableFilter();
+
+        // Register
+        container.registerDependency(dependencyName, new StubInjectableResolver(expected), {filter: filter});
+        container.registerDependency(name, new StubInjectableResolver(expected), {dependencyNames: [dependencyName]});
+
+        // Activate
+        container.activate()
+          .then((injectables) => {
+            let injectable = injectables.get(name);
+
+            // Assert activated instance
+            expect(injectable).toEqual(expected);
+
+            // Assert mapped dependencies
+            expect(filter.name).toEqual(name);
+            expect(filter.dependencyName).toEqual(dependencyName);
+            expect(filter.instance).toEqual(expected);
+            done();
+          })
+          .catch((error) => {
+            throw error;
+          });
+
+      });
+
+    });
   });
 
   describe('Container.getInstance()', () => {
@@ -411,7 +473,7 @@ describe('./container/Container.js', () => {
             expect(injectable).toEqual(expected1);
 
             // Replace
-            let oldInstance =container.replaceInstance(name, expected2);
+            let oldInstance = container.replaceInstance(name, expected2);
 
             // Assert after replace
             expect(injectable).toEqual(expected2);
@@ -508,7 +570,10 @@ describe('./container/Container.js', () => {
         let expected2 = {value2: name};
 
         // Register
-        container.registerDependency(name, new StubInjectableResolver(expected1), {profileNames: ['profile'], singleton: false});
+        container.registerDependency(name, new StubInjectableResolver(expected1), {
+          profileNames: ['profile'],
+          singleton: false,
+        });
 
         // Execute
         container.activate()

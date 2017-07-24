@@ -50,11 +50,18 @@ describe('./module/ModuleBuilder.js', () => {
 
   describe('isSingleton()', () => {
 
+    it('returns itself when set to true', () => {
+      // Execute
+      let result = builder.isSingleton(true);
+
+      // Assert
+      expect(result).toEqual(builder);
+    });
+
     it('throws error when attempting to configure as non-singleton', () => {
 
       // Execute
       try {
-
         let result = builder.isSingleton(false);
       } catch (error) {
         expect(error.message).toEqual('Cannot configure a module to be a non-singleton');
@@ -75,6 +82,22 @@ describe('./module/ModuleBuilder.js', () => {
       // Assert
       expect(builder.resolver.constructor.name).toEqual('ModuleInjectableResolver');
       expect(result).toEqual(builder);
+    });
+
+  });
+
+  describe('done()', () => {
+
+    it('sets singleton to true', () => {
+      // Setup
+      builder.useModule({});
+      expect(builder.singleton).toBeFalsy();
+
+      // Execute
+      builder.done();
+
+      // Assert
+      expect(builder.singleton).toBeTruthy();
     });
 
   });

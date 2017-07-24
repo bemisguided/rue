@@ -362,6 +362,25 @@ describe('./injectableManager/InjectableManager.js', () => {
       expect(injectableEntries.has(injectableEntry)).toBeFalsy();
     });
 
+    it('throws error when there are duplicate named injectables', () => {
+      // Setup
+      let name = 'test';
+      let resolver = new InjectableResolver('resolver');
+      let dependencyNames = ['dependencyNames'];
+      injectableManager.addInjectableEntry(name, resolver, {});
+      injectableManager.addInjectableEntry(name, resolver, {});
+
+      // Execute
+      try {
+        injectableManager.getInjectableEntries();
+      } catch (error) {
+        // Assert
+        expect(error.message).toEqual('Duplicate injectable found in active profile scope: name=test');
+        return;
+      }
+      throw 'Expect an error';
+    });
+
   });
 
 })
