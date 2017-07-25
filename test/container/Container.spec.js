@@ -181,7 +181,6 @@ describe('./container/Container.js', () => {
               done();
             })
             .catch((error) => {
-              console.log(error.stack);
               throw error;
             });
 

@@ -26,7 +26,7 @@ describe('./module/ModuleInjectableResolver.js', () => {
     // Setup
     let dependency1 = 'hello';
     let dependency2 = 'there';
-    let module: { value1?: any, value2?: any, init: Function } = {
+    let module: { value1?: any, value2?: any, init: Function, } = {
       init (value1, value2) {
         this.value1 = value1;
         this.value2 = value2;
@@ -54,7 +54,7 @@ describe('./module/ModuleInjectableResolver.js', () => {
     // Setup
     let dependency1 = 'hello';
     let dependency2 = 'there';
-    let module: { value1?: any, value2?: any, init: Function } = {
+    let module: { value1?: any, value2?: any, init: Function, } = {
       init (value1, value2) {
         this.value1 = value1;
         this.value2 = value2;
