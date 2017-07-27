@@ -27,7 +27,7 @@ describe('./module/ModuleInjectableResolver.js', () => {
     let dependency1 = 'hello';
     let dependency2 = 'there';
     let module: { value1?: any, value2?: any, init: Function, } = {
-      init (value1, value2) {
+      init(value1, value2) {
         this.value1 = value1;
         this.value2 = value2;
         return new Promise((resolve) => {
@@ -55,7 +55,7 @@ describe('./module/ModuleInjectableResolver.js', () => {
     let dependency1 = 'hello';
     let dependency2 = 'there';
     let module: { value1?: any, value2?: any, init: Function, } = {
-      init (value1, value2) {
+      init(value1, value2) {
         this.value1 = value1;
         this.value2 = value2;
       },
@@ -135,7 +135,7 @@ describe('./module/ModuleInjectableResolver.js', () => {
     let module = {
       init: () => {
 
-      }
+      },
     };
 
     // Execute

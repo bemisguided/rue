@@ -132,9 +132,6 @@ describe('./util/ProfileHelper.js', () => {
   describe('ProfileHelper.normalizeActiveProfiles()', () => {
 
     it('normalizes the active profiles with a default only if no profiles provided', () => {
-      // Setup
-      let profile1 = 'profile1';
-
       // Execute
       let result = ProfileHelper.normalizeActiveProfiles();
 
@@ -168,9 +165,6 @@ describe('./util/ProfileHelper.js', () => {
   describe('ProfileHelper.normalizeProfiles()', () => {
 
     it('normalizes the profiles with a default only if no profiles provided', () => {
-      // Setup
-      let profile1 = 'profile1';
-
       // Execute
       let result = ProfileHelper.normalizeProfiles();
 

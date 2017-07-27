@@ -306,7 +306,7 @@ describe('./util/ProxyHelper.js', () => {
       it('can change a Function proxy target', () => {
         // Setup
         let expected = 'hello';
-        let target1 = (value) => 'goodbye';
+        let target1 = () => 'goodbye';
         let target2 = (value) => value;
         let proxy = ProxyHelper.swapableProxy(target1);
 
@@ -364,7 +364,7 @@ describe('./util/ProxyHelper.js', () => {
     it('can change a target Function for a Swapable Proxy', () => {
       // Setup
       let expected = 'hello';
-      let target1 = (value) => 'goodbye';
+      let target1 = () => 'goodbye';
       let target2 = (value) => value;
       let proxy = ProxyHelper.swapableProxy(target1);
 

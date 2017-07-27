@@ -29,7 +29,7 @@ describe('./factory/FactoryInjectableResolver.js', () => {
       return new Promise((resolve) => {
         resolve({
           value1: value1,
-          value2: value2
+          value2: value2,
         });
       });
     };
@@ -49,7 +49,7 @@ describe('./factory/FactoryInjectableResolver.js', () => {
     let factory = (value1, value2) => {
       return {
         value1: value1,
-        value2: value2
+        value2: value2,
       };
     };
 
@@ -64,10 +64,9 @@ describe('./factory/FactoryInjectableResolver.js', () => {
   it('handles errors on execution of a factory method', () => {
     // Setup
     let dependency = 'hello';
-    let factory = (value) => {
-      throw {
-        value: value
-      };
+    let error = new Error(dependency);
+    let factory = () => {
+      throw error;
     };
 
     // Execute
@@ -75,7 +74,7 @@ describe('./factory/FactoryInjectableResolver.js', () => {
     let promise = resolver.resolve('test', [dependency]);
 
     // Assert
-    expect(promise).rejects.toEqual({ value: dependency });
+    expect(promise).rejects.toEqual(error);
   });
 
 });

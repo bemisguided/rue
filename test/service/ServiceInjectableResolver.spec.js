@@ -46,11 +46,10 @@ describe('./service/ServiceInjectableResolver.js', () => {
   it('handles errors on construction of a service class', () => {
     // Setup
     let dependency = 'hello';
+    let error = new Error(dependency);
     class Service {
-      value: any;
-
-      constructor(value: any) {
-        throw { value: value };
+      constructor() {
+        throw error;
       }
     }
 
@@ -59,7 +58,7 @@ describe('./service/ServiceInjectableResolver.js', () => {
     let promise = resolver.resolve('test', [dependency]);
 
     // Assert
-    expect(promise).rejects.toEqual({ value: dependency });
+    expect(promise).rejects.toEqual(error);
   });
 
 });

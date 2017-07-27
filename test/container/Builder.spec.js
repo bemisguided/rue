@@ -90,6 +90,22 @@ describe('./container/Builder.js', () => {
       expect(result).toEqual(builder);
     });
 
+    it('throws an error on duplicate dependency names', () => {
+      // Setup
+      let dependency1 = 'dependency1';
+      let dependency2 = 'dependency2';
+
+      // Execute
+      try {
+        builder.withDependencies(dependency1, dependency2, dependency1);
+      } catch (error) {
+        // Assert
+        expect(error.message).toEqual('Dependency names cannot contain duplicates');
+        return;
+      }
+      throw new Error('Expect an error');
+    });
+
   });
 
   describe('withFilter()', () => {
@@ -174,10 +190,11 @@ describe('./container/Builder.js', () => {
       // Assert
       try {
         builder.done();
-      }
-      catch (e) {
+      } catch (e) {
         expect(e.message).toEqual('No module specified: name=test');
+        return;
       }
+      throw new Error('Expect an error');
     });
 
   });

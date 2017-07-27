@@ -24,7 +24,7 @@ describe('./injectableManager/InjectableManager.js', () => {
 
   let injectableManager: InjectableManager;
 
-  beforeEach(function () {
+  beforeEach(function() {
     injectableManager = new InjectableManager();
   });
 
@@ -79,7 +79,6 @@ describe('./injectableManager/InjectableManager.js', () => {
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
-      let singleton = true;
 
       // Execute
       let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
@@ -126,7 +125,7 @@ describe('./injectableManager/InjectableManager.js', () => {
 
   });
 
-  describe('getInjectableEntry()', function () {
+  describe('getInjectableEntry()', function() {
 
     it('returns a InjectableEntry from the default profile when no profiles are provided', () => {
       // Setup
@@ -281,15 +280,14 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Assert
       try {
         injectableManager.getInjectableEntry(name, profiles);
-      }
-      catch (e) {
+      } catch (e) {
         expect(e.message).toEqual('Duplicate injectable found in active profile scope: name=test');
       }
     });
 
   });
 
-  describe('getInjectableEntries()', function () {
+  describe('getInjectableEntries()', function() {
 
     it('returns a Map of ContainerEntries from the default profile when no profiles are provided', () => {
       // Setup
@@ -366,7 +364,6 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name = 'test';
       let resolver = new InjectableResolver('resolver');
-      let dependencyNames = ['dependencyNames'];
       injectableManager.addInjectableEntry(name, resolver, {});
       injectableManager.addInjectableEntry(name, resolver, {});
 
@@ -378,7 +375,7 @@ describe('./injectableManager/InjectableManager.js', () => {
         expect(error.message).toEqual('Duplicate injectable found in active profile scope: name=test');
         return;
       }
-      throw 'Expect an error';
+      throw new Error('Expect an error');
     });
 
   });

@@ -1,30 +1,25 @@
 module.exports = {
   "extends": [
-    "plugin:flowtype/recommended"
-  ],
-  "plugins": [
-    "flowtype"
+    "fbjs/strict"
   ],
   "rules": {
-    // Spacing rules
+    // Code rules
+    "no-cond-assign": ["error", "always"],
+    "no-var": "error",
+    "one-var": ["error", "never"],
+
+    // Stylistic rules
+    "comma-dangle": ["error", "always-multiline"],
+    "eol-last": ["error", "always"],
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
-    "eol-last": ["error", "always"],
-    
-    // Quotes
+    "max-len": ["off"],
     "quotes": ["error", "single"],
+    "space-before-function-paren": ["error", "never"],
 
-    // Flow configurations
+    // // Flow configurations
     "flowtype/semi": ["error", "always"],
     "flowtype/delimiter-dangle": ["error", "always"],
 
-    // override default options for rules from base configurations
-    "no-cond-assign": ["error", "always"],
-
-    // disable rules from base configurations
-    "no-console": "error",
-
-    // ES6
-    "no-var": "error",
   }
 };

@@ -49,7 +49,7 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
     dependencyTraverser = new DependencyTraverser(dependencyProcessor);
   });
 
-  describe('traverse()', function () {
+  describe('traverse()', function() {
 
     it('returns an ordered set of ContentEntries with no dependencies', () => {
       // Setup
@@ -233,13 +233,14 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       // Assert
       try {
         dependencyTraverser.traverse(new Set(injectableEntryMap.values()));
-      }
-      catch (e) {
+      } catch (e) {
         expect(e.message).toEqual('Dependency not available: name=test3');
+        return;
       }
+      throw new Error('Expect an error');
     });
 
-    it('throws error when there is a circular dependency', function () {
+    it('throws error when there is a circular dependency', function() {
       // Setup
       let name1 = 'test1';
       let name2 = 'test2';
@@ -256,10 +257,11 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       // Assert
       try {
         dependencyTraverser.traverse(new Set(injectableEntryMap.values()));
-      }
-      catch (e) {
+      } catch (e) {
         expect(e.message).toEqual('Circular dependency found: name=test2 dependency=test1');
+        return;
       }
+      throw new Error('Expect an error');
     });
 
   });

@@ -109,7 +109,7 @@ describe('./test/TestContainer.js', () => {
         expect(error.message).toEqual('Test replacement already exists: name=test parent=');
         return;
       }
-      throw 'Expect an error';
+      throw new Error('Expect an error');
     });
 
     it('throws error when swaping a duplicate indirect instance', () => {
@@ -128,7 +128,7 @@ describe('./test/TestContainer.js', () => {
         expect(error.message).toEqual('Test replacement already exists: name=test parent=testParent');
         return;
       }
-      throw 'Expect an error';
+      throw new Error('Expect an error');
     });
 
   });
@@ -140,8 +140,7 @@ describe('./test/TestContainer.js', () => {
       let name = 'test';
       let parent = 'testParent';
       let expected1 = {value1: name};
-      let expected2 = {value2: name};
-      stubContainer.instance = expected2;
+      stubContainer.instance = {value2: name};
       let replacement = {
         name: name,
         parent: parent,

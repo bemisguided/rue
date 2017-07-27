@@ -185,7 +185,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
 
       // Assert
       promise
-        .then((injectable) => {
+        .then(() => {
           expect(stubInjectableResolver.name).toEqual(name);
           expect(stubInjectableResolver.dependencies).toEqual([... dependencies.values()]);
           done();
@@ -327,7 +327,7 @@ describe('./container/activation/ActivationProcessor.js', () => {
         }
 
         postInit() {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.called = true;
             resolve();
           });
