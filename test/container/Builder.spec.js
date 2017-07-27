@@ -19,8 +19,8 @@
  */
 import Builder from '../../lib/container/Builder';
 import Container from '../../lib/container/Container';
-import InjectableFilter from '../../lib/container/injectables/InjectableFilter';
-import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
+import PreInjectionFilter from '../../lib/container/PreInjectionFilter';
+import InjectableResolver from '../../lib/container/InjectableResolver';
 
 describe('./container/Builder.js', () => {
 
@@ -112,7 +112,7 @@ describe('./container/Builder.js', () => {
 
     it('correctly sets the profiles provided', () => {
       // Setup
-      let filter = new InjectableFilter();
+      let filter = new PreInjectionFilter();
 
       // Execute
       let result = builder.withFilter(filter);

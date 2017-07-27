@@ -18,7 +18,7 @@
  * @flow
  */
 import InjectableManager from '../../../lib/container/injectables/InjectableManager';
-import InjectableResolver from '../../../lib/container/injectables/InjectableResolver';
+import InjectableResolver from '../../../lib/container/InjectableResolver';
 
 describe('./injectableManager/InjectableManager.js', () => {
 

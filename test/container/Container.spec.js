@@ -18,8 +18,8 @@
  * @flow
  */
 import Container from '../../lib/container/Container';
-import InjectableFilter from '../../lib/container/injectables/InjectableFilter';
-import InjectableResolver from '../../lib/container/injectables/InjectableResolver';
+import PreInjectionFilter from '../../lib/container/PreInjectionFilter';
+import InjectableResolver from '../../lib/container/InjectableResolver';
 import PromiseHelper from '../../lib/utils/PromiseHelper';
 
 class StubInjectableResolver extends InjectableResolver {
@@ -59,7 +59,7 @@ class StubFactoryInjectableResolver extends InjectableResolver {
 
 }
 
-class StubInjectableFilter extends InjectableFilter {
+class StubPreInjectionFilter extends PreInjectionFilter {
 
   name: string;
 
@@ -393,7 +393,7 @@ describe('./container/Container.js', () => {
         let name = 'injectable';
         let dependencyName = 'dependency';
         let expected = {value: name};
-        let filter = new StubInjectableFilter();
+        let filter = new StubPreInjectionFilter();
 
         // Register
         container.registerDependency(dependencyName, new StubInjectableResolver(expected), {filter: filter});

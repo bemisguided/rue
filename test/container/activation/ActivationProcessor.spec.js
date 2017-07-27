@@ -20,7 +20,7 @@
 
 import ActivationProcessor from '../../../lib/container/activation/ActivationProcessor';
 import InjectableEntry from '../../../lib/container/injectables/InjectableEntry';
-import InjectableResolver from '../../../lib/container/injectables/InjectableResolver';
+import InjectableResolver from '../../../lib/container/InjectableResolver';
 import PromiseHelper from '../../../lib/utils/PromiseHelper';
 import ProxyHelper from '../../../lib/utils/ProxyHelper';
 

@@ -18,16 +18,17 @@
  * @flow
  */
 import DependencyTraverser from '../../../lib/container/dependencies/DependencyTraverser';
-import DependencyProcessor from '../../../lib/container/dependencies/DependencyProcessor';
+import DependencyLocator from '../../../lib/container/dependencies/DependencyLocator';
 import InjectableEntry from '../../../lib/container/injectables/InjectableEntry';
-import InjectableResolver from '../../../lib/container/injectables/InjectableResolver';
+import InjectableManager from '../../../lib/container/injectables/InjectableManager';
+import InjectableResolver from '../../../lib/container/InjectableResolver';
 
-class StubDependencyProcessor extends DependencyProcessor {
+class StubDependencyLocator extends DependencyLocator {
 
   results: Map<string, InjectableEntry>;
 
   constructor(results: Map<string, InjectableEntry>) {
-    super();
+    super(new InjectableManager(), []);
     this.results = results;
   }
 
@@ -40,13 +41,13 @@ class StubDependencyProcessor extends DependencyProcessor {
 describe('./container/dependencies/DependencyTraverser.js', () => {
 
   let injectableEntryMap: Map<string, InjectableEntry>;
-  let dependencyProcessor: StubDependencyProcessor;
+  let dependencyLocator: StubDependencyLocator;
   let dependencyTraverser: DependencyTraverser;
 
   beforeEach(() => {
     injectableEntryMap = new Map();
-    dependencyProcessor = new StubDependencyProcessor(injectableEntryMap);
-    dependencyTraverser = new DependencyTraverser(dependencyProcessor);
+    dependencyLocator = new StubDependencyLocator(injectableEntryMap);
+    dependencyTraverser = new DependencyTraverser(dependencyLocator);
   });
 
   describe('traverse()', () => {
