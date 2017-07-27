@@ -7,6 +7,7 @@ module.exports = {
     "no-cond-assign": ["error", "always"],
     "no-var": "error",
     "one-var": ["error", "never"],
+    "prefer-arrow-callback": ["error"],
 
     // Stylistic rules
     "comma-dangle": ["error", "always-multiline"],

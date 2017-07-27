@@ -24,7 +24,7 @@ describe('./injectableManager/InjectableManager.js', () => {
 
   let injectableManager: InjectableManager;
 
-  beforeEach(function() {
+  beforeEach(() => {
     injectableManager = new InjectableManager();
   });
 
@@ -125,7 +125,7 @@ describe('./injectableManager/InjectableManager.js', () => {
 
   });
 
-  describe('getInjectableEntry()', function() {
+  describe('getInjectableEntry()', () => {
 
     it('returns a InjectableEntry from the default profile when no profiles are provided', () => {
       // Setup
@@ -287,7 +287,7 @@ describe('./injectableManager/InjectableManager.js', () => {
 
   });
 
-  describe('getInjectableEntries()', function() {
+  describe('getInjectableEntries()', () => {
 
     it('returns a Map of ContainerEntries from the default profile when no profiles are provided', () => {
       // Setup

@@ -49,7 +49,7 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
     dependencyTraverser = new DependencyTraverser(dependencyProcessor);
   });
 
-  describe('traverse()', function() {
+  describe('traverse()', () => {
 
     it('returns an ordered set of ContentEntries with no dependencies', () => {
       // Setup
@@ -240,7 +240,7 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       throw new Error('Expect an error');
     });
 
-    it('throws error when there is a circular dependency', function() {
+    it('throws error when there is a circular dependency', () => {
       // Setup
       let name1 = 'test1';
       let name2 = 'test2';
