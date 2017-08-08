@@ -18,7 +18,7 @@
  * @flow
  */
 import InjectableManager from '../../../lib/container/injectables/InjectableManager';
-import InjectableResolver from '../../../lib/container/InjectableResolver';
+import StubInjectableResolver from '../../helper/StubInjectableResolver';
 
 describe('./injectableManager/InjectableManager.js', () => {
 
@@ -33,7 +33,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('creates and adds a InjectableEntry with a default setting of singleton', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
 
       // Execute
@@ -53,7 +53,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('creates and adds a InjectableEntry with a setting of singleton as provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let singleton = false;
 
@@ -77,7 +77,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('creates and adds a InjectableEntry to the default profile when no profiles are provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
 
       // Execute
@@ -97,7 +97,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('creates and adds a InjectableEntry to multiple profiles when multiple profiles are provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let singleton = true;
       let profile1 = 'profile1';
@@ -130,7 +130,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a InjectableEntry from the default profile when no profiles are provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let injectableEntry1 = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
@@ -152,7 +152,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a InjectableEntry from the a single profile when a single profile is provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profiles = [profile1];
@@ -180,7 +180,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a InjectableEntry from the default profile when a single profile is provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profiles = [profile1];
@@ -204,7 +204,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a InjectableEntry from multiple profiles when multiple profiles are provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
@@ -232,7 +232,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a InjectableEntry from the default profile when multiple profiles are provided (resolved the same ModuleEntry)', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
@@ -260,8 +260,8 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('throws error when different ContainerEntries are resolved from different profiles', () => {
       // Setup
       let name = 'test';
-      let resolver1 = new InjectableResolver('resolver');
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
@@ -292,7 +292,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a Map of ContainerEntries from the default profile when no profiles are provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let injectableEntry = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
@@ -304,7 +304,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a Map of ContainerEntries from the default profile a profile is provided', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let injectableEntry = injectableManager.addInjectableEntry(name, resolver, {dependencyNames: dependencyNames});
 
@@ -317,9 +317,9 @@ describe('./injectableManager/InjectableManager.js', () => {
       // Setup
       let name1 = 'name1';
       let name2 = 'name2';
-      let resolver1 = new InjectableResolver('resolver');
-      let resolver2 = new InjectableResolver('resolver');
-      let resolver3 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
+      let resolver3 = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
@@ -345,7 +345,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('returns a Map of ContainerEntries without a InjectableEntry when a profile is provided does not have it available', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencyNames = ['dependencyNames'];
       let profile1 = 'profile1';
       let profile2 = 'profile2';
@@ -363,7 +363,7 @@ describe('./injectableManager/InjectableManager.js', () => {
     it('throws error when there are duplicate named injectables', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       injectableManager.addInjectableEntry(name, resolver, {});
       injectableManager.addInjectableEntry(name, resolver, {});
 

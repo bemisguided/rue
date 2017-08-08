@@ -21,7 +21,7 @@ import DependencyTraverser from '../../../lib/container/dependencies/DependencyT
 import DependencyLocator from '../../../lib/container/dependencies/DependencyLocator';
 import InjectableEntry from '../../../lib/container/injectables/InjectableEntry';
 import InjectableManager from '../../../lib/container/injectables/InjectableManager';
-import InjectableResolver from '../../../lib/container/InjectableResolver';
+import StubInjectableResolver from '../../helper/StubInjectableResolver';
 
 class StubDependencyLocator extends DependencyLocator {
 
@@ -55,7 +55,7 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
     it('returns an ordered set of ContentEntries with no dependencies', () => {
       // Setup
       let name = 'test';
-      let resolver = new InjectableResolver('resolver');
+      let resolver = new StubInjectableResolver('resolver');
       let dependencies = [];
       let injectableEntry = new InjectableEntry(name, resolver);
       injectableEntry.dependencyNames = dependencies;
@@ -73,12 +73,12 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       // Setup
       let name1 = 'test1';
       let name2 = 'test2';
-      let resolver1 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
       let injectableEntry1 = new InjectableEntry(name1, resolver1);
       injectableEntry1.dependencyNames = [name2];
       injectableEntryMap.set(name1, injectableEntry1);
 
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = [];
       injectableEntryMap.set(name2, injectableEntry2);
@@ -99,17 +99,17 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       let name2 = 'test2';
       let name3 = 'test3';
 
-      let resolver1 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
       let injectableEntry1 = new InjectableEntry(name1, resolver1);
       injectableEntry1.dependencyNames = [name2, name3];
       injectableEntryMap.set(name1, injectableEntry1);
 
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = [];
       injectableEntryMap.set(name2, injectableEntry2);
 
-      let resolver3 = new InjectableResolver('resolver');
+      let resolver3 = new StubInjectableResolver('resolver');
       let injectableEntry3 = new InjectableEntry(name3, resolver3);
       injectableEntry3.dependencyNames = [];
       injectableEntryMap.set(name3, injectableEntry3);
@@ -129,17 +129,17 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       let name1 = 'test1';
       let name2 = 'test2';
       let name3 = 'test3';
-      let resolver1 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
       let injectableEntry1 = new InjectableEntry(name1, resolver1);
       injectableEntry1.dependencyNames = [name2, name3];
       injectableEntryMap.set(name1, injectableEntry1);
 
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = [name3];
       injectableEntryMap.set(name2, injectableEntry2);
 
-      let resolver3 = new InjectableResolver('resolver');
+      let resolver3 = new StubInjectableResolver('resolver');
       let injectableEntry3 = new InjectableEntry(name3, resolver3);
       injectableEntry3.dependencyNames = [];
       injectableEntryMap.set(name3, injectableEntry3);
@@ -161,22 +161,22 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       let name2 = 'test2';
       let name3 = 'test3';
       let name4 = 'test4';
-      let resolver1 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
       let injectableEntry1 = new InjectableEntry(name1, resolver1);
       injectableEntry1.dependencyNames = [name2, name3];
       injectableEntryMap.set(name1, injectableEntry1);
 
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = [];
       injectableEntryMap.set(name2, injectableEntry2);
 
-      let resolver3 = new InjectableResolver('resolver');
+      let resolver3 = new StubInjectableResolver('resolver');
       let injectableEntry3 = new InjectableEntry(name3, resolver3);
       injectableEntry3.dependencyNames = [];
       injectableEntryMap.set(name3, injectableEntry3);
 
-      let resolver4 = new InjectableResolver('resolver');
+      let resolver4 = new StubInjectableResolver('resolver');
       let injectableEntry4 = new InjectableEntry(name4, resolver4);
       injectableEntry4.dependencyNames = [name3];
       injectableEntryMap.set(name4, injectableEntry4);
@@ -197,12 +197,12 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       let name1 = 'test1';
       let name2 = 'test2';
       let name3 = 'test3';
-      let resolver1 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
       let injectableEntry1 = new InjectableEntry(name1, resolver1);
       injectableEntry1.dependencyNames = [name2, '?' + name3];
       injectableEntryMap.set(name1, injectableEntry1);
 
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = ['+' + name3];
       injectableEntryMap.set(name2, injectableEntry2);
@@ -221,12 +221,12 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       let name1 = 'test1';
       let name2 = 'test2';
       let name3 = 'test3';
-      let resolver1 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
       let injectableEntry1 = new InjectableEntry(name1, resolver1);
       injectableEntry1.dependencyNames = [name2, name3];
       injectableEntryMap.set(name1, injectableEntry1);
 
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = [name3];
       injectableEntryMap.set(name2, injectableEntry2);
@@ -245,12 +245,12 @@ describe('./container/dependencies/DependencyTraverser.js', () => {
       // Setup
       let name1 = 'test1';
       let name2 = 'test2';
-      let resolver1 = new InjectableResolver('resolver');
+      let resolver1 = new StubInjectableResolver('resolver');
       let injectableEntry1 = new InjectableEntry(name1, resolver1);
       injectableEntry1.dependencyNames = [name2];
       injectableEntryMap.set(name1, injectableEntry1);
 
-      let resolver2 = new InjectableResolver('resolver');
+      let resolver2 = new StubInjectableResolver('resolver');
       let injectableEntry2 = new InjectableEntry(name2, resolver2);
       injectableEntry2.dependencyNames = [name1];
       injectableEntryMap.set(name2, injectableEntry2);

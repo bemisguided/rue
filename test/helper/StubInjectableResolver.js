@@ -17,27 +17,21 @@
  *
  * @flow
  */
-import InjectableResolver from '../../../lib/container/InjectableResolver';
+import InjectableResolver from '../../lib/container/InjectableResolver';
+import PromiseHelper from '../../lib/utils/PromiseHelper';
 
-describe('./injectableManager/injectables/InjectableResolver.js', () => {
+export default class StubInjectableResolver extends InjectableResolver {
 
-  describe('resolve()', () => {
+  target: any;
 
-    it('always returns the injectable without operation', () => {
-      // Setup
-      let expected = {
-        value: 'test',
-      };
+  constructor(target:any) {
+    super();
+    this.target = target;
+  }
 
-      let resolver = new InjectableResolver(expected);
+  // eslint-disable-next-line no-unused-vars
+  resolve(name: string, dependencies: Array<any>): Promise<any> {
+    return PromiseHelper.wrapResolved(this.target);
+  }
 
-      // Execute
-      let target = resolver.resolve('name1', ['name2', 'name3']);
-
-      // Assert
-      expect(target).toEqual(expected);
-    });
-
-  });
-
-});
+}
